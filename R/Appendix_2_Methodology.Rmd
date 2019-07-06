@@ -1,0 +1,348 @@
+---
+title: "The parliamentary discourse on citizenship in Germany between 1996 and 2016"
+subtitle: "Methodology"
+author: "Examinee: Kevin Glock"
+supervisor: "Professor Andreas Blätte"
+supervisor2: "Merve Schmitz-Vardar, M.A."
+date: "4 Juni 2019"
+output:
+  ioslides_presentation: default
+  slidy_presentation: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+# Appendix - Methodology & Data
+
+
+-------------------------------------------------------------------------------------------
+!-- Second file Methodology & Data.html
+-------------------------------------------------------------------------------------------
+
+
+-------------------------------------------------------------------------------------------
+## Contents
+-------------------------------------------------------------------------------------------
+
+* Data Infrastructure
+* Data & Methods
+
+
+-------------------------------------------------------------------------------------------
+## Data Infrastructure
+-------------------------------------------------------------------------------------------
+
+One can use polmineR for processing and analysing indexed text corpora of plenary protocols from the German _Bundestag_ (GermaParl)
+and the German _Landesparlamente_ (MigParl; a corpus of topics referring to themes of migration and integration).
+
+
+Corpora are indexed in the _corpus workbench_ (CWB) and can be processed with the _corpus query processor_ (CQP).
+This is a very powerful query language (Abfragesprache) to search for _structural_ and _positional attributes_ of a applied corpus.
+Such processing is possible because plenary protocols (text documents) are annotated in e__X__tended __M__arkup __L__anguage (XML; _erweiterte Auszeichnungssprache_).
+_XML_ is a markup language in some aspects similar to the _hypertext markup languages_ (html). With _XML_ one can tag content within documents and its several meta informations with spans: <a span>.
+
+
+The following slides will introduce the specific cases of GermaParl & MigParl.
+Both are in most cases similar in structural and positional attributes.
+
+
+-------------------------------------------------------------------------------------------
+## Data Infrastructure
+-------------------------------------------------------------------------------------------
+
+
+* GermaParl & MigParl
+   + Structural attributes
+   + Positional attributes
+
+
+-------------------------------------------------------------------------------------------
+## GermaParl & MigParl
+-------------------------------------------------------------------------------------------
+
+------------------------------------------------------------------------------------
+!-- R code: load libraries.
+------------------------------------------------------------------------------------
+
+------------------------------------------------------------------------------------
+## Load libaries
+------------------------------------------------------------------------------------
+
+Load the used libraries for processing the corpora. You have to use four packages: polmine, xts, data.table and magrittr.
+
+```{r, eval= TRUE, echo= FALSE}
+library(polmineR)
+library(xts)
+library(data.table)
+library(magrittr)
+```
+
+------------------------------------------------------------------------------------
+## Choose corpora
+------------------------------------------------------------------------------------
+
+Second choose the corpora to use for the analysis.
+
+```{r, eval= TRUE, echo= TRUE}
+use("polmineR")
+use("GermaParl")
+use("MigParl")
+```
+
+
+-------------------------------------------------------------------------------------------
+!-- Structural attributes.
+-------------------------------------------------------------------------------------------
+
+
+-------------------------------------------------------------------------------------------
+## Structural attributes of GermaParl & MigParl
+-------------------------------------------------------------------------------------------
+
+
+GermaParl and MigPArl are annotated in an _XML_ (e__X__tended __M__arkup __L__anguage) format.
+XML is a language used to markup unique words (named tokens) with "<a span>".
+This "<span>" can used for tagging the token and its meta informations.
+
+
+We have got the structural attributes which refer to the corpus` layout or architecture of informations given on the corpus.
+
+
+Look on the example next side:
+
+
+***
+
+
+We have got the structural attribute: <speaker> and <date>. When we make a query of the word <Staatsbürger>,
+we can fill in the meta variable <speaker> and <date> and all given speakers who have stated the search word will be ploted by date and the actor´s name.
+
+
+If we search additionally for the party, we can sort all speaker by party and date, and get an fast overview.
+By applying "citizen <-" we safe the query as an object in the R environment.
+
+
+´´´{r, eval= TRUE, echo= TRUE, message= TRUE}
+
+citizen <- kwic("GermaParl", query= 'Staatsbürger', s_attribute = c("speaker", "date", "party"))
+
+```
+
+
+-------------------------------------------------------------------------------------------
+## Structural attributes of GermaParl & MigParl
+-------------------------------------------------------------------------------------------
+
+There are some more structural attributes given for both corpora, which you can see here.
+
+
+_sturctural attributes of GermaParl_
+```{r, eval= TRUE, echo=TRUE, massage= TRUE}
+
+s_attributes("GermaParl")
+
+```
+
+_structural attributes of MigParl_
+```{r, eval= TRUE, echo=TRUE, massage= TRUE}
+
+s_attributes("MigParl")
+
+```
+
+
+-------------------------------------------------------------------------------------------
+## Structural attributes of GermaParl & MigParl
+-------------------------------------------------------------------------------------------
+
+
+You can show also the varying characteristics for all of the structural attributes if you use:
+
+```{r, eval= FALSE, echo= TRUE, massage= TRUE}
+
+# s_attributes("MigParl", s_attribute= "fill in the structural attribute you are interested in")
+# Example: s_attributes("MigParl", s_attribute= "party")
+```
+
+
+-------------------------------------------------------------------------------------------
+## Structural attributes of GermaParl & MigParl
+-------------------------------------------------------------------------------------------
+
+
+One can see that there are several structural attributes tagged, which we can use for searching specific cases of tokens and its meta information.
+We can search for unique speaker, or only a specific date, or related. This allows a very fast analysis of such huge text corpora.
+Such corpora are given in several sientific diciplines and on several topics of research interests.
+
+
+You can find some overview on available text corpora on: [CLARIN] (https://www.clarin.eu/portal).
+Here we use the two corpora from the polmineR project available on [Github] (https://www.github.io/polmine)
+
+
+- GermaParl (German _Bundestag_ debates)
+
+and 
+
+- MigParl (regional parliamental plenary protocols of all 16 _Landesparlamente_).
+
+
+Other ones are EuroParl or ParlSpeech, which are also available via the internet.
+
+
+-------------------------------------------------------------------------------------------
+## Positional attributes of GermaParl & MigParl
+-------------------------------------------------------------------------------------------
+
+On the one hand we have got the structural attributes as meta information annotated, like given in the former example.
+On the other hand other forms of attributes are annotated: The positional ones.
+
+
+-------------------------------------------------------------------------------------------
+!-- positional attributes.
+-------------------------------------------------------------------------------------------
+
+
+-------------------------------------------------------------------------------------------
+## Positional attributes of GermaParl & MigParl
+-------------------------------------------------------------------------------------------
+
+Positional attributes of GermaParl & MigParl...
+
+
+* refer to the corpus position
+
+* follow the heuristical question about where a token stands on the corpus
+
+* are also enriched with "part-of-speech" (POS) recognition, lemmatatisation, and stemed word forms
+
+For further information on those part-of-speech annotation have a look on this [information site] (https://www.dudenhofer.de).
+
+-------------------------------------------------------------------------------------------
+## Positional attributes of GermaParl & MigParl
+-------------------------------------------------------------------------------------------
+
+_positional attributes of GermaParl_
+```{r, eval= TRUE, echo= TRUE, massage= TRUE}
+p_attributes("GermaParl")
+```
+
+_positional attributes of MigParl_
+```{r, eval= TRUE, echo= TRUE, massage= TRUE}
+p_attributes("MigParl")
+```
+
+
+
+-------------------------------------------------------------------------------------------
+## Data & Methods
+-------------------------------------------------------------------------------------------
+
+
+* Data
+* Methods
+
+
+-------------------------------------------------------------------------------------------
+## Data
+-------------------------------------------------------------------------------------------
+
+
+For the analysis in _the parliamentary discourse on citizenship in Germany between 1996 and 2016_ both corpora are used.
+The most relevant structural attributes are 
+
+* <speaker>,
+* <parliamentary_group>,
+* <date>,
+* <lp> and
+* <regional_state>,
+
+as well as all of the positional attributes in different steps of analysis.
+Part-of-speech annotation will be used in specific cases within the kwic analysis
+(example: search for <Staatsbürgerschaft> without <doppelt*> before it, or without adjectives in general.
+
+
+The lemmatasation and stemed word forms are used in the statistical validation of collocations of contextualisations of keywords of the citizenship discourse.
+Lemmatasation and stemming (n-grams method) can be used for reducing noise in data and increase significance of tested token strings.
+
+
+-------------------------------------------------------------------------------------------
+## Methods
+-------------------------------------------------------------------------------------------
+
+
+The following slides will give an overview of used methods for analysis and its functional logic.
+
+
+-------------------------------------------------------------------------------------------
+### count() and kwic()
+-------------------------------------------------------------------------------------------
+
+
+Methods to be used:
+
+* count() # simple count function for absolute and relative frequencies
+
+count("GermaParl", query= "'[Dd]oppel*' '[Ss]taatsbürger.*'")
+
+
+* kwic() # keyword-in-context function with several options to specify the query
+
+kwic("GermaParl", query= "'[Dd]oppel*' '[Ss]taatsbürger.*'")
+
+
+-------------------------------------------------------------------------------------------
+### dispersion()
+-------------------------------------------------------------------------------------------
+
+
+* dispersion() # this function is used for the time-series analysis (one can choose the option freq=TRUE for relative frequencies)
+
+dispersion("GermaParl", query= "'[Dd]oppel*' '[Ss]taatsbürger.*'")
+
+
+-------------------------------------------------------------------------------------------
+### cooccurrences()
+-------------------------------------------------------------------------------------------
+
+
+* cooccurrences() # is used to search words which occures with other words; when you want to know those other words
+
+cooccurrences("GermaParl", query= "'[Dd]oppel*' '[Ss]taatsbürger.*'")
+
+and
+
+
+-------------------------------------------------------------------------------------------
+### subset() and partition()
+-------------------------------------------------------------------------------------------
+
+
+* subset() # to sort data and additionally for further analysis steps
+
+subset("GermaParl", query= "'[Dd]oppel*' '[Ss]taatsbürger.*'")
+
+* partition() # similar in some aspects to subset; also used for processing some analysis steps
+
+partition("GermaParl", query= "'[Dd]oppel*' '[Ss]taatsbürger.*'")
+
+
+-------------------------------------------------------------------------------------------
+### features() and ngrams()
+-------------------------------------------------------------------------------------------
+
+
+* features() # used for the statistical steps
+
+features("GermaParl", query= "'[Dd]oppel*' '[Ss]taatsbürger.*'")
+
+* ngrams() # also used for the stistical testing
+
+ngrams("GermaParl", query= "'[Dd]oppel*' '[Ss]taatsbürger.*'")
+
+
+-------------------------------------------------------------------------------------------
+##  ------
+-------------------------------------------------------------------------------------------
+

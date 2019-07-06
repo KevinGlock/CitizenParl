@@ -1,0 +1,25 @@
+---
+title: "The parliamentary discourse on citizenship in Germany between 1996 and 2016"
+subtitle: "Appendix"
+author: "Examinee: Kevin Glock"
+advisor: "Professor Andreas Blätte"
+advisor2: "Merve Schmitz-Vardar, M.A."
+date: "4 Juni 2019"
+output:
+  ioslides_presentation: default
+  slidy_presentation: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+
+# Table of Contents
+
+
+[1. Theoretical overview] (Theoretical overview.html)
+
+[2. Methodology and Data] (Methodology & Data.html)
+
+[3. Analysis] (Analysis.html)
