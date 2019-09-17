@@ -1,0 +1,138 @@
+---
+title: "Literature"
+author: "Kevin Glock"
+date: "11 9 2019"
+output: html_document
+encoding: UTF-8
+---
+
+
+### B
+
+- Baker, P., 2006. Using Corpora in Discourse Analysis. London, New York: Continuum.
+
+- Baker, P., et al., 2008. A useful methodological synergy?: Combining critical discourse analysis and corpus linguistics to examine discourses of refugees and asylum seekers in the UK press. Dis-course & Society, 19 (3), 273–306.
+
+- Berry, M., Garcia-Blanco, I., and Moore, K., 2016. Press coverage of the refugee and migrant crisis in the EU: A content analysis of five European countries. [Project Report]. Geneva: UNHCR.
+
+- Blaette, A., 2016. polmineR.
+
+- Bloemraad, I., Korteweg, A., and Yurdakul, G., 2010. Staatsbürgerschaft und Einwanderung: Assimilation, Multikulturalismus und der Nationalstaat. In: G. Yurdakul and Y.M. Bodemann, eds. Staatsbürgerschaft, Migration und Minderheiten: Inklusion und Ausgrenzungsstrategien im Vergleich. Wiesbaden: VS Verlag für Sozialwissenschaften / GWV Fachverlage GmbH, Wiesbaden, 13–46.
+
+- BMI Bund, 2019a. Einbürgerung [online], Bundesministerium des Innern, für Bau und Heimat. Availa-ble from: https://www.bmi.bund.de/DE/themen/verfassung/staatsangehoerigkeit/einbuergerung/einbuergerung-node.html [Accessed 8 Jul 2019].
+
+- BMI Bund, 2019b. Staatsangehörigkeit [online], Bundesministerium des Innern, für Bau und Heimat. Available from: https://www.bmi.bund.de/DE/themen/verfassung/staatsangehoerigkeit/staatsangehoerigkeit-node.html;jses-sionid=AE97B9769E479B9D3D9C80D1B5A62BCA.1_cid287 [Accessed 8 Jul 2019].
+
+- Bommes, M., 2000. Migration und Lebenslauf: Aussiedler im nationalen Wohlfahrtsstaat. Sozialwissenschaften und Berufspraxis, 23 (1), 9–28.
+
+- Boomgaarden, J.G. and Vliegenthart, R., 2009. How news content influences anti-immigration attitudes: Germany, 1995-2005. European Journal of Political Research (48), 516–542.
+
+- Brubaker, R., 1992. Citizenship and nationhood in France and Germany. Cambridge, Mass. u.a: Harvard Univ. Press.
+
+- Bubenhofer, N., 2006. Einführung in die Korpuslinguistik: Praktische Grundlagen und Werkzeuge [online]. Zürich, Mannheim, Dresden, ZHAW Zurich University of Applied Sciences. Available from: https://www.bubenhofer.com/korpuslinguistik/kurs/index.php?id=statistik_signifikanzLLR.html [Accessed 8 Jun 2019].
+
+- Budge, I., 2015. Issue Emphases, Saliency Theory and Issue Ownership: A Historical and Conceptual Analysis: [Abstract]. West European Politics, 38 (4), 761–777.
+
+- Burke, E., Canavan, F., and Payne, E.J., 1999. Select works of Edmund Burke: A new imprint of the Payne edition. Indianapolis, IN: Liberty Fund.
+
+### D
+
+- DWDS, 2019. Nation [online], Digitales Wörterbuch der deutschen Sprache. Available from: https://www.dwds.de/wb/Nation [Accessed 1 Jul 2019].
+
+- Dzankic, J., 2016. Migration, citizenship and post-national membership. In: A. Triandafyllidou, ed. Routledge Handbook of Immigration and Refugee Studies. New York, NY: Routledge, 163–168.
+
+### E
+
+- Entman, R., 1993. Framing: Towards clarification of a fractured paradigm. Journal of Communication, 43 (4), 51–58.
+
+### F
+
+- Foucault, M., 2016. Überwachen und Strafen: Die Geburt des Gefängnisses. 16th ed. Frankfurt am Main: Suhrkamp.
+
+### G
+
+- Green, S., 2004. The politics of exclusion: Institutions and immigration policy in contemporary Germany. In: C. Jeffery and C. Lees, eds. Issues in German Politics. Manchester: Manchester University Press.
+
+- Gries, T.S., 2009. Quantitative Corpus Linguistics with R: A Practical Intoduction: Taylor & Francis.
+
+### H
+
+- Habermas, J., 1993. Justification and application: Remarks on discourse ethics. Cambridge, Mass: MIT Press.
+
+- Hansen, G., 2001. Die Deutschmachung: Ethnizität und Ethnisierung im Prozess von Ein- und Ausgrenzungen. In: G. Hansen, R. Pfundtner, and N. Wenning, eds. Lernen für Europa. Münster/ New York/ München/ Berlin: Waxmann Verlag GmbH.
+
+- Helbling, M., 2012. Framing Immigration: Varieties of Arguments, Actors and Opportunity Structures. SSRN Electronic Journal.
+
+- Helbling, M., 2013. Validating integration and citizenship policy indices. Comparative European Politics, 11 (5), 555–576.
+
+- Helbling, M., 2014. Framing Immigration in Western Europe. Journal of Ethnic and Migration Studies, 40 (1), 21–41.
+
+- Helfer, L., 2016. Media effects on politicians: An individual-level political agenda-setting experiment. The International Journal of Press/Politics, 21 (2), 233–252.
+
+- Hoffmann, W., Dose, N., and Wolf, D., 2015. Politikwissenschaft. 3rd ed. Konstanz und München: UTB.
+
+- Hunger, U., 2014. Migrations- und Integrationspolitik im europäischen Vergleich: Jahrbuch Migration - Yearbook Migration 2012/2013. Berlin [u.a.]: LIT.
+
+### I
+
+- Ignatow, G. and Mihalcea, R.F., 2017. Text mining: A guidebook for the social sciences. Los Angeles, London, New Delhi, Singapore, Washington DC, Melbourne: Sage.
+
+### J
+
+- Jacobs, D. and Rea, A., 2007. The end of national models? Integration courses and citizenship trajectories in Europe. International Journal on Multicultural Societies (IJMS), 9 (2), 264–283.
+
+- Jellinek, G. and Jellinek, W., 1914. Allgemeine Staatslehre: Algemeine Soziallehre des Staates. 3rd ed. Berlin.
+
+- Joppke, C., 1999. How immigration is changing citizenship: A comparative view. Ethnic and Racial Studies, 22 (4), 629–652.
+
+- Joppke, C., 2007. Beyond national models: civic integration policies for immigrants in Western Europe. Western European Politics, 30 (1), 1–22.
+
+### K
+
+- Katz, E. and Lazarsfeld, P.F., 1955. Personal influence: The part played by people in the flow of mass communications. New York, NY: Free Press.
+
+- Keating, M., 2009. Social citizenship, solidarity and welfare in regionalized and plurinational states. Citizenship Studies, 13 (5), 501–513.
+
+- Korte, K.-R. and Fröhlich, M., 2004. Politik und Regieren in Deutschland. Paderborn: Schöningh.
+
+- Koschyk, H. and Stolz, R., eds., 2001. Alte und neue Deutsche?: Staatsangehörigkeits- und Integrationspolitik auf dem Prüfstand. München: Hanns Seidel Stiftung e.V.
+
+- Kymlicka, W., 1996. Multicultural Citizenship: Oxford University Press.
+
+- Kymlicka, W. and Norman, W., 1994. Return of the Citizen: A Survey of Recent Work on Citizenship Theory; Survey Article. In: P. Singer, ed. Ethics: Oxford University Press, 104–352.
+
+### M
+
+- Merriam-Webster Dictionary, 2019. discourse [online]. Available from: https://www.merriam-webster.com/dictionary/discourse [Accessed 8 Jun 2019].
+
+- Michalowski, I., 2004. An Overview on Introduction Programmes for Immigrants in Seven European Member States. Amsterdam.
+
+- Mohr, K., 2005. Stratifizierte Rechte und soziale Exklusion von Migranten im Wohlfahrtsstaat / Stratified Rights and Social Exclusion of Migrants in the Welfare State. Zeitschrift für Soziologie, 34 (5), 219.
+
+### R
+
+- Reichel, D., ed., 2011. Staatsbürgerschaft und Integration: Die Bedeutung der Einbürgerung für MigrantInnen. Wiesbaden: VS Verlag für Sozialwissenschaften / Springer Fachmedien Wiesbaden GmbH, Wiesbaden.
+
+### S
+
+Schmitz-Vardar, M., 2018. Regionale Differenzen in der gesellschaftlichen Integration. [submitted, currently not published].
+
+- Soysal, Y.N., 1994. Limits of Citizenship: Migrants and Postnational Membership in Europe: University of Chicago Press.
+
+- Soysal, Y.N., 1997. Limits of citizenship: Migrants and postnational membership in Europe. 2nd ed. Chicago u. a.: Univ. of Chicago.
+
+- Streeck, W. and Thelen, K., eds., 2005. Beyond Continuity: Institutional Change in Advanced Political Economies. Oxford, UK: Oxford Univ. Pr.
+
+### T
+
+- Tibi, B., 2002. Islamische Zuwanderung: Die gescheiterte Integration. Stuttgart, München: Deutsche Verlags-Anstalt GmbH.
+
+- Tsebelis, G., 1995. Decision Making in Political Systems: Veto Players in Presidentialism, Parliamentarism, Multicameralism and Multipartyism. British Journal of Political Science [online], 25 (3), 289–325. Available from: http://www.jstor.org/stable/194257.
+
+### W
+
+- Wlezien, C., 2005. On the salience of political issues: The problem with ‘most important problem’. Electoral Studies, 24 (4), 555–579.
+
+- Worbs, S., 2008. Die Einbürgerung von Ausländern in Deutschland: Integrationsreport. Working Paper 17. "Integrationsreport" Teil 3: Forschungsgruppe des Bundesamtes für Migration und Flüchtlinge.
+
+

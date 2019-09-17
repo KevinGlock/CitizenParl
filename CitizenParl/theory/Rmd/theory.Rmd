@@ -1,0 +1,52 @@
+---
+title: "Theory"
+author: "Kevin Glock"
+date: "11 9 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### [Aim](file:///C:/Users/admin/Desktop/Anhang/CitizenParl/theory/Presi.html)
+
+
+## Staatsbürgerschaft und Migration
+
+- Staatsbürgerschaft und Migration
+  + Wie ist Staatsbürgerschaft und Migration definiert?
+  + Staatsbürgerschaft-Konzeption: institutioneller Wandel der Konzeption in DE von National zu Transnational trotz Beibehaltung traditioneller Aspekte, europäische und internationale Anpassung an Rechtskonventionen und Normierungen (Brubaker 1992; Soysal, 1994, 1997; Kimlicka 1994, 1996; Joppke 1999, 2007); Ableitend von vorherigen und Burke (1999): Trennung von Nationalen, Identitären und Defintorischen Aspekten von Staatsbürgerschaft --> Betrachtung von Definitorischen Aspekten.
+  + Migration als vorangehender Prozess von Integration. Eingeschränkte Perspektive von einem Standpunkt mit eigener Interessensausrichtung. Folglich: Vornehmlich regulative Policy-Konzeptionen zielen auf Migration als politisches Problem eines Empfängerstaates. Abgrenzungsfaktoren: Territorial-, Sozial- und Definitorisch-exklusiv. Integration nach Innen (vgl. z.B. Bloemraad et. al. 2010; Reichel, 2011; Green, 2004; Jacobs and Rea, 2007; Schmitz-Vardar 2018).
+  + Staatsbürgerschaftkonzeptionen bilden sich im Diskurs durch den individuellen Sprechakt ab. Der sprachliche Kontext gibt Aufschluss darüber welche Konzeption von welchen Interessengruppen (in der parlamentarischen Arena) artikuliert werden und welche Forderungen sich später in Policies potenziell durchsetzen.
+
+
+## Parteiendifferenz
+
+
+- Parteidifferenzhypothese (Burke 1999; Dzankic, 2016)
+  + Parteidivergenzen und -konvergenzen
+  + Parteien sind prinzipell entlang von ideologsichen Standpunkten organisiert und grenzen sich von den jeweils anderen ab.
+  + Durch das institutionelle Gefüge (regional, supranational, international), soziodemografische und sozioökonomische Veränderungen kam es makroskopisch gesehen zu Konvergenzen in den ideologischen Ausrichtungen der Parteien (neoliberaler und multilateraler Diskurs und transnationale Herausbildungen)
+  + Ebenso bestehen weiterhin ideologische Divergenzen zwischen erstgenannten Konzeptionen und nationaler Soveränität und dem damit verbundenen Definitionsbereichen von Staaten. Parteien grenzen sich im Staatsbürgerschaftsdiskurs durch transnationale und nationale Konzeptionen von Staatsbürgerschaft ab.
+
+
+## Salienz
+
+
+- Salienztheorie (Budge, 2015; Helbling, 2012; Boomgaarden and Vliegenthart, 2009; Wlezien, 2005)
+  + politische Aufmerksamkeit relevanter Themen
+  + Zunehmender Einfluss von Nachrichtenberichterstattung
+  + Framing von Immgration als negativer und positiver Einflussfaktor
+  + Emperie zeigt zunehmend exklusive Policy-Strategien in verschiedenen Staaten, jedoch auch inklusive Modelle.
+  + Gefühlte Stimmung einer zunehmend negativen Rhetorik gegenüber Migrantengruppen von Rechts.
+  + Frage nach der Sichtbarkeit von Rhetoriken im parlamentarischen Staatsbürgerschaftsdiskurs und des Einflusses von absoluter Immigrationsrate und absoluten/relativen Häufigkeiten im Diskurs und möglicher Policy-Strategien in Langzeit.
+
+- Annahme: Salienz für ein relevantes Problem beeinflusst den individuellen Sprechakt im Parlament und damit die langfristige parteipolitische rethorische Positionierung
+
+
+### [Methodology](file:///C:/Users/admin/Desktop/Anhang/CitizenParl/theory/methodology.html)
+
+### [Analysis](file:///C:/Users/admin/Desktop/Anhang/CitizenParl/theory/analysis.html)
+
+### [Literature](file:///C:/Users/admin/Desktop/Anhang/CitizenParl/theory/literature.html)

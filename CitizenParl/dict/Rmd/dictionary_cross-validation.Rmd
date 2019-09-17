@@ -1,0 +1,1018 @@
+---
+title: "Cross validating a deductive dictionary for corpus linguistical analysis with polmineR"
+author: "Kevin Glock"
+date: '`r format(Sys.Date(), "%Y-%B-%d")`'
+output:
+  html_document: default
+  pdf_document: default
+  word_document: default
+fontsize: "11pt"
+fontstyle: "Arial"
+lang: "en"
+linkcolor: black
+citecolor: black
+subtitle: "Methodological pre-Study"
+always_allow_html: yes
+toc: yes
+urlcolor: black
+encoding: "UTF-8"
+---
+## Glossary of Terms
+
+English terms                 | German terms
+----------------------------- | -----------------------------------------------
+Nationality Act	              | Staatsangehörigkeitsgesetz
+Citizenship Act               | Staatsbürgerschaftsgesetz
+Foreigners’ Policy            | Ausländerpolitik
+Ethnic German resetteler      | Russlanddeutsche/Aussiedler / etnisch Deutsche
+resident                      | Aufenthalt
+
+
+
+```{r setup, include=F}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+## Introduction
+
+In order to investigate the changes in the linguistic contextualization of citizenship based on plenary protocols of the German _Bundestag_, the paper in hand presents a corpus linguistical approach to cross-validate a deductive formulated citizenship dictionary with LDA topic modelling. The aim is to classify the linguistic contextualisation of the citizenship topic by parliamentary parties in the German _Bundestag_ between 1996 and 2016. This paper serves as the methodological pre-study for Bachelor´s thesis “The parliamentary discourse on citizenship in Germany be-tween 1996 and 2016: A corpus linguistical context analysis of the concept of citizenship in R”. The thesis examines plenary speeches to identify significant co-occurring terms (collocations) and to compare significant linguistic contexts within and between parliamentary parties.
+This paper therefore presents a deductively outworked dictionary and applies it on a keyword-in-context (kwic) analysis to qualitatively detect permutations’ contexts, as well as extract all variations of search words, to regex them. In a third step an LDA topic model is applied to cross-validate the citizenship related terms with a stochastic approach. Three questions shall be answered:
+
+_How is the concept of citizenship defined and how can it be conceptualised?_
+
+_What topics are included within the policy field of citizenship?_
+
+_Do all relevant nodes unambiguously refer to citizenship?_
+
+Answering these research questions, the paper conceptualises citizenship in the following chapter. The analysis is done mixed-methodical combining qualitative analysis of kwics and corpus linguistical methods for text statistics (collocations) and (topic) modelling. The used and out-worked methodology in this paper supports a valid corpus analysis in the further Bachelors’ thesis. The timespan which causes the huge number of documents to be analysed will make it difficult to evaluate them qualitative only. To gain opportunities of macro analysis of the dis-course on citizenship and parallel analyse micro level data from parliamentary speakers, as well as to reduce research coasts, and simplify processing steps, the corpus analysis is done comput-er-assisted in the programming language R. The database and software come from _PolMineR_ (Blaette 2016) and the offered corpus, _GermaParl_. _PolMine_ is an open-source infrastructure  that contains several textual datasets of plenary protocols from the German _Bundestag_. Methods for analysing natural language are given and can be easily processed in R; several additional packages can be implemented, and further quantitative analysis steps can be processed similarly. It is efficient, no financial costs will exist, as well the time spending analysis of natural language data by qualitative content analysis steps, combined with the quantitative time-series analysis, will be completely replicable to stress reliability. Limitations are given for the classified terms and for stop words, an estimation error will be remaining on it because of the difficulty to disambiguating search words and use adjustments on the text. In some cases, also pre-defined stop words can have significance although they appear on first sign as irrelevant, as well as some search words can used in different contexts and not only refer to citizenship aspects.
+
+
+## Theory
+
+The policy filed of citizenship refers to identity and nationality, as they are often used synonym, even though they refer to other aspects. While citizenship refers to citizen in the sense of a political subject which is marked with a palette of general rights within a territory mostly like human rights, the concept identity refers to a common sense about the question what is the citizenry like and which rights are allocated to it, and who is distinct from it, or in general who is as a non-citizen or alien excluded? Nationality refers to the common sense of a national state or a nation as an idealist imagination of a folk, a community of descant. Green argued that this construct is a practice of ‘politics of exclusion’ (Green 2004) by defining who is in and who is out-group actor or cannot sorted into a group and will be stateless. A nation thereby is an ideal, cultural, and historical incorporation of a society as a folk (Volk) (DWDS 2019). Jellinek (1914) formulated that a state is composed by three elements, a folk (Staatsvolk), a territory (Staatsgebiet), and a sovereign endued with legitimated power (Staatsgewalt) (Jellinek and Jellinek 1914, p. 144). He describes the equality between the Volk and the state, a ‘popular imagination of antic folks coming from the early modern period’ (Jellinek and Jellinek 1914, p. 144) and ‘functioned as basis for eventual doctrine of popular sovereignty’ (Jellinek and Jellinek 1914, p. 144). Also, Brubaker stresses this definition of citizenship. ‘In the French tradition the nation has been conceived in relation to the institutional and territorial frame of the state’ (Brubaker 1992, p. 2). ‘Yet while French nationhood is constituted by political unity, it is centrally expressed in the striving for cultural unity. Political inclusion has entailed cultural assimilation, for regional cultural minorities and immigrants alike[,] […] [whilst] the German understanding has been Volk-centred and differentialist (Brubaker 1992, p. 1). Brubaker is arguing that in the French tradition citizens are constituted on a political membership, whereas the German tradition is based on ethnic membership. 						In general, it is necessary to differentiate between the single aspects of _Ausländerpolitik_ in Germany to oversee the whole debate on citizenship issues. Green (2004) defines the policy fields in immigration related politics, like citizenship, asylum, and resident in Germany, so called, _Ausländerpolitik_ (pp. 1–2) (see Table 1). The issues are multifaceted and overlap discriminating concepts of biological origin, imagined identity, being native and feelings of belonging(ness), as well as the social affiliation. 									Considering the _Staatsangehörigkeitsgesetz_ (StAG) in Germany one can see that there are three options to become a German ius sanguinis, ius soli, or ius domicili apart some special forms  and dual citizenship and European union citizenship. To exclude the other policy fields of _Ausländerpolitik_, only nodes referring to citizenship aspects will be included. All nodes are trunked (shortened to the gerund) and regexed (filled with linguistic regular expressions) (see Table 2).
+
+_Table 1: Policy fields of Ausländerpolitik defined by Green (2004:2)_
+
+__Policy fields__
+
++ Asylum
++ Ethnic German resettler/ immigrants
++ Flight & forced migration
++ Foreigners’ resident
++ Citizenship
++ Deportation, Removal & repatriation
++ (family) Re-unification
+
+The issues are multifaceted and overlap discriminating concepts of biological origin, imagined identity, being native and feelings of belonging(ness), as well as the social affiliation. Considering the _Staatsangehörigkeitsgesetz (StAG)_ in Germany one can see that there are three options to become a German _ius sanguinis, ius soli_, or in sense of _ius domicili_ as regulation within the naturalisation process, that is as residential regulation. Apart from that some special forms and regulations are defined. As well as dual citizenship is legal but also restricted and European union citizenship exists, likewise it is often discussed about denaturalisation. To exclude the other policy fields of Ausländerpolitik, only those terms referring to definitional citizenship aspects as above will be included. All terms are stemmed (shortened to the infinitive) and regexed (filled with linguistic regular expressions) (see Table 2).
+
+
+_Table 2: Sorted dictionary adapted from Green (2004:2)_
+
+```{r, message=F, eval=T, warning=F, echo= F}
+dict <-read.csv(file= "C:/Users/admin/dict_citizenship1.csv", header=TRUE, sep = ";")
+read.csv(file= "C:/Users/admin/dict_citizenship1.csv", header=TRUE, sep = ";")
+View(dict)
+```
+
+
+## Methodology & Data
+
+Plenary protocols have been rarely analysed because of its scope and several contained agenda items in one session. The scope does make it difficult to extract specific data for qualitative analysis and make the analysis time-spending and labour intensive. Consequently, content anal-ysis is the more expensive (time and work), the more documents included. In long-term anal-yses on discourses the costs therefore raise, the bigger the span of series is. The aim of qualitative content analysis is to focus on single cases and to structure the given texts into inductive or deductive formulated categories or codes to extract relevant concepts, statements, perceptions or related, to find patterns of potential correlations and induced causalities (Kühnel 2008; Schnell 2009). By using inductive categories, the aim is to formulate and abduct new hypothe-ses and theories, by using a deductive approach it is to test these two. The work in hand applies a deductive approach to formulate used variations of terms regarding definitory citizenship aspects to analyse the permutations of those terms and its variation over time in parliamentary discourse. In this paper a mix-method approach is applied, combining qualitative steps with quantitative corpus linguistical steps to provide a reliable and valid dictionary for this aim.						To identify relevant plenary protocols referring to the citi-zenship discourse in Germany the _GermaParl_ corpus is used. The used corpus is enriched with XML annotation which contains meta information about part-of-speech (pos), speaker, date, party, and related. 
+It includes all protocols between 1996 and 2016. The _PolMineR_ project (Blaette 2016), which is located at the _University of Duisburg-Essen_, provides a data infrastructure for processing and analysing plenary debates of the German _Bundestag_, and relevant features (methods) for analysis are implemented. It is provided open-source in several packages via the _Comprehensive R Archive Network_ (CRAN). _GermaParl_ is open-source licensed  published by _CLARIN-D_. It can be implemented in the R programming language and can simply be used with the additional GUI _RStudio_. 
+All trunked tokens included in the dictionary (see Table 1) were observed in a kwic analysis. Thereby collocations will be also evaluated to validate used terms in the dictionary that refers to citizenship discourse and to guarantee all relevant terms are included. To avoid biased results, stop words were reduced for the presented analysis. Those are theoretically irrelevant words or phrases which can be removed by applying a negative list. The stop word list includes “everyday” words such as articles (der, die, das, wir, ihr, sie, er, es), or filler words and conjunctions (so, hier, hmm, nun, und, aber, als); in short: function words that have no lexical content but only grammatical functions.
+In the second step, all variations of nodes will be executed and its concordances qualitative checked to find outlier which do not refer to the originary citizenship discourse. The collocations of extracted terms were analysed to guarantee statistical significance of the by using a log-likelihood of 11,86 (.000) and to find potential further combinations and composita of pre and suffixes to approximate a better matching of regular expressions. To guarantee the dictionary includes all relevant nodes the former steps are cross-validated by using Latent Dirichlet Allocation (LDA) a semi-automated topic modelling approach which composes a stochastically a language model of tokens which significant refers to a given topic in text. Nodes included in the dictionary and in the language model can by compared and missing values can by identified and admitted to the dictionary. A document-term matrix can be further extracted, and all relevant documents of the citizenship topic can be identified to define a population.
+
+
+## Results
+
+This chapter presents the results of the detailed analysis of kwics given in the dictionary. Most of the used search words have a good fit and refer to the citizenship discourse, however, some words also refer to other discourses like integration, security and religion. The biggest problem is the discriminatory power of the concepts within the policy fields of _Ausländerpolitik_ in Germany. The topic modelling shows that in most cases those concepts are linguistically and jurid-ically linked to each other. Also, there are referring aspects to other linguistical concepts like metaphors, aphorisms, and also rhetoric.
+
+
+### Keyword-in-context analysis
+
+The contextualisation of permutations of keywords are analysed using the kwic analysis (Bubenhofer 2006), significant collocations of a log-likelihood of 10.83 (p < .0001) with minimum 4 counts are highlighted to simplify the qualitative check of contexts. Like stated above the citizenship concept is difficult to discriminate from other concepts of _Ausländerpolitik_ and mostly occurs in the context of flight and asylum, immigration, and resettlement of Ethnic Germans. And the link between citizenship, nationality and identity is obvious in context of naturalisation, immigration, and deportation. It is referred to actors like migrating groups and its perspective and living conditions, as well as to war areas and living areas of Ethnic Germans, like _Sudetenland_.
+
+
+```{r, message= F, eval= T, warning=F, echo=F}
+
+library(polmineR)
+
+library(magrittr)
+
+library(tm)
+
+use("GermaParl")
+```
+
+
+_Table 3: Permutations of [Aa]usbürger.* and different policy fields_
+
+```{r, message= F, eval= T, warning=F, echo=F}
+kwic("GERMAPARL",
+     query= '".*[Aa]us.*bürger.*"',
+     left= 10, right= 10, cqp= TRUE,
+     s_attribute= c(
+       "parliamentary_group", "speaker", "date", "url"),
+     interjection = FALSE, regex = TRUE) %>%
+highlight(
+     lightgreen= c(
+        "geflohen", "geflohene", "Wehrdienstes", "Paß", "Menschen", "DDR",
+        "Optionskinder", "Bestrebungen", "Rentenleistungen", "Vermögenswerte",
+        "Auskunft", "Vertrauensschutz", "reformieren", "doppelte", "Staatsbürgerschaft",
+        "türkische", "EU-Bürgerinnen", "ausgereist", "schändliche", "Entscheidungsmöglichkeit", "staatenlose",
+        "Baath-Regimes", "tagtäglich", "zwangsweise", "Enteignung", "Tschechoslowakei", "Dekrete", "Unrecht",
+        "Benes-Dekrete", "Vertreibung", "Sudetendeutschen", "Exzesse", "unschuldig", "Leid", "zugefügt", "ehemaligen",
+        "Erklärung", "Bundesregierungen", "Domaschk", "Türkei", "Einschlägige", "Vertei", "unschuldiges", "Staatsangehöriger",
+        "Wehrdienstes", "Einbürgerungen", "türkischer", "Abschiebungen", "abgestellt", "vornimmt", "beeeinflussen", "erteilen",
+        "angesprochenen", "unvermindert", "anhält", "freigekaufte", "zermürbendes", "Häftlinge", "Westen", "zugeleitet",
+        "Abschaffung", "Gebühren", "Staatsangehörigkeit", "entlassen", "Annahme", "verlangt", "Verlieren",
+        "Kriminellen", "Sachverhalte", "Kreissaal", "Mehrstaatlichkeit", "PaÃ", "Willkommenskultur", "zwangsweise",
+        "Schwarzen", "Homosexualität", "Fehlentwicklung", "Letztes", "überwiegende", "erworben", "Rassismus", "abschieben",
+        "abgeschoben", "Abschiebung", "facto", "doppelte", "begangen", "schweren"),
+      regex = FALSE, interjection = FALSE
+      ) %>% show()
+```
+
+The collocation analysis had shown that used terms in the dictionary have a good fit to the originary citizenship discourse and that concepts from other policy fields admittedly occur but not been included within the dictionary.
+
+_Table 4: Permutations of [Dd]oppelpa(ss|ß).* and its double sense_
+
+```{r, message= F, eval= T, warning=F, echo=F}
+kwic(
+  "GERMAPARL",
+    query= '"[Dd]oppelpa(ss|ß).*"',
+    left= 10, right= 10, cqp= TRUE,
+    s_attribute= c(
+      "parliamentary_group", "speaker", "date", "url"),
+    interjection = FALSE, regex = TRUE) %>%
+highlight(
+    lightgreen= c(
+      "Frauenquote", "Angehöriger", "geschilderten", "generellen", "globalisierten", "leben", "Burkas",
+      "Dagegen-Politik", "Mesut", "Özil", "Mietpreisbremse", "Schlammschlachten", "kosmopolitisch", "irrwitzig",
+      "Zwanziger", "Optionspflichtigen", "Fußballstadion", "Philippika", "eleganter", "gespielt", "Fehlerquellen",
+      "verfehlten", "Anstatt", "Stattdessen", "konsequent", "gegangen", "Caffier", "Eleganz", "Burkaverbot",
+      "integrationspolitische", "VideoÃ¼berwachung", "Gegenseitigkeit", "Zugewinn", "EU-Bürger", "Henkel", "Erlangung",
+      "plausibel", "worin", "StaatsbÃ¼rgerschaft", "Ausländerhetze", "Straßenwahlkampf", "schwarzem",
+      "Volksbefragungen", "einhergegangen", "wurde", "losgetreten", "miterlebt", "hessischen", "starten",
+      "gemacht", "massiven", "Koch", "kamen", "funktionierten", "punkten", "Methoden", "doppelte", "Staatsangehörigkeit",
+      "Hessen", "Zeiten", "ebenso", "faul", "angeblicher", "Optionspflicht",
+      "abgeschafft", "Union", "gestoppt", "rot-grüne"),
+    regex = TRUE, interjection = FALSE
+    ) %>% show()
+```
+
+Some terms are excluded from the dictionary because they are ambiguous significands and refer to other significates (see Figure 3 & 4). Further combinations and composita of pre and suffixes and rare cases were found, and the regular expressions were adjusted to approximate a better matching.
+
+_Figure 1: Dotplot graph of significant collocations of abstammen_
+
+```{r, message= FALSE, eval= TRUE, warning=FALSE, echo=F}
+ cooccurrences("GERMAPARL", query = "abstammen", left = 10, right = 10) %>% 
+  subset(ll >= 10.83) %>%
+  subset(!tolower(word) %in% tm::stopwords("de")) %>%
+  subset(!word %in% c("''", ",", "``", ":", "[", "]")) %>%
+  dotplot(cex = 0.8, main = 'Kookkurrenzen zu "abstammen"')
+```
+
+
+The kwic analysis had also shown that reducing stop words were effective but white noise in the data still exists. Often syntax errors occur and parsing errors from OCR. That is, there is occur-ring information from interjections although there were logically excludes within the function options, or quotation marks and slashes are included without content, as well as there are occur-ring problems with line breaks and the dash for syllabification. To reduce this noise in further steps of analysis, the textclean package will be used.
+
+
+_Table 5: Permutations of [Ii]us and white noise from interjections and syntax._
+
+```{r, message= F, eval= T, warning=F, echo=F} 
+kwic(
+  "GERMAPARL",
+    query= '"[Ii]us"',
+    left= 10, right= 10, cqp= TRUE,
+    s_attribute= c(
+      "parliamentary_group", "speaker", "date", "url"),
+    interjection = FALSE, regex = TRUE) %>%
+highlight(
+    lightgreen= c(
+      "soli", "sanguinis", "Staatsangehörigkeitsrecht", "Abkömmlinge", "moderne", "Geburtsortprinzips",
+      "Einwanderungskonzept", "Territorialprinzips", "bello", "geboren", "wilhelminische", "bellum", "fortwirken",
+      "Geburtsrechts", "Zufälligkeit", "achtjährigen", "ius", "Territorialprinzip", "Geburtsrecht", "Untersuchung", "trat",
+      "ad", "Seitdem", "Neben", "Deutscher", "Staatsbürgerschaftsrechts", "Hinnahme", "Mehrstaatigkeit", "hieraus",
+      "Staatsangehörigkeitsrechts", "Doppelstaatsbürgerschaften", "Staatsbürger", "Blutsrecht", "überfällig",
+      "Einbürgerungserleichterungen", "Beide", "Soli", "Jus", "tizministerin", "tizministerium", "Fortschrittlich",
+      "unechten", "diametralen", "Öffnung", "Doppelstaatsangehörigkeit", "echtes", "Abkehr", "Richtung", "stoppt", "überzugehen",
+      "Justizhaushalt", "Optionsmodell", "liberales", "Arbeitsanreize", "Arbeitnehmerüberlassungsgesetz", "blauen", "geringere",
+      "abgelaufen", "Lohnnebenkosten"),
+    regex = FALSE, interjection = FALSE
+    ) %>% show()
+```
+
+
+The evaluation shows, stemming is not always an adequate method for retrieval search words because of various meanings in different contexts of special lexemes from a word, like _abstammen_ and the reference to stockbreeding and DNA-analysis. Plus, some search words are used to refer to different legal concepts like _Optionsmodell_ or are also used in a different sense as metaphors like _Doppelpass_ and the reference to soccer, however, only in one case, hence it was added to the dictionary because of its theoretical conceptional relevance. In case of _Optionsmodell_ it is an ordinary compound from two very common words: option and model, used in various contexts thus it was excluded. However, those information reductions are compensated by other included search words which often co-occur with these ones excluded.
+
+
+### LDA cross-validation
+
+For cross-validation Latent Dirichlet Allocation was used. Those terms included in the dictionary can by compared and missing values can by identified and admitted. A valid dictionary can later be used for sampling relevant documents regarding the citizenship discourse by using this method. Evaluating the first 300 terms from topic model 133 had shown that the topic model not only refers to citizenship aspects.
+
+_Table 6: Terms referring citizenship from LDA topic modelling_
+
+__terms (stochastical)__
+
+- Staatsangehörigkeit(sgesetz/-es), Einbürgerung, Staatsangehörigkeitsrecht(s/es), Optionspflicht, Pass,
+- Optionsmodell, Staatsbürger(schaft/-en), Staatsangehörigen, doppelt(e/en), (nur als n-gram), Paß,
+- Staatsbürgerschaftsrecht, Staatsbürgerschaft(srecht), Mehrstaatigkeit, Einbürgerungen,
+- Mehrstaatlichkeit, eingebürgerten, Staatsangehörige, einbürgern, Staatsangehörigkeiten,
+- Ausländergesetzes, Abschiebung, Optionszwang, Einbürgerungstest, Einbürgerungszahlen, Aufenthalt,
+- Optionsmodells, Doppelstaatler, abgeschoben, Doppelpaß, Ausländergesetz, Staatsangehöriger,
+- Doppelpass, soli, Staatsbürgern, Pässe
+
+This is, in the linguistic dimension of citizenship it is not only used as a single topic rather than as a complex compound to other issues from _Ausländerpolitik_ like Ethnic German resettlers, asylum or family re-unification, as well as deportation. Subsequently, the topic model is a topic of Foreigner´s law. This is hardly surprising for the legal compounding of these aspects. In Germany many regulations are supplemental and special provisions of law are defined subsequently. Those unambiguous terms referring to the citizenship discourse were also taken from the topic modelling and added to the dictionary (see Table 7).
+
+_Table 7: Sorted dictionary adapted from Green (2004:2) (validated)_
+
+```{r, message= FALSE, eval= T, warning=FALSE, echo=F}
+dict2 <-read.csv(file= "C:/Users/admin/dict_citizenship2.csv", header=TRUE, sep = ";")
+read.csv(file= "C:/Users/admin/dict_citizenship2.csv", header=TRUE, sep = ";")
+```
+
+
+## Conclusion
+
+The paper could present a cross-validation of a deductively formulated dictionary by using the _polmineR_ package and the offered corpus GermaParl. It could be shown that conceptional specification is a necessity to formulate an adequate dictionary for a theoretical conducted analysis of a construct like citizenship. Citizenship thereby is one policy field of _Ausländerpolitik_ in Germany and defines how is in-peer and out-peer it refers to different concepts of nation, identity and descent. Not every word does refer unambiguously to citizenship. To guarantee the disambiguity and contextuality of definitional citizenship aspects those words that not only refer to this citizenship aspects was excluded from the dictionary. The other stated policy fields asylum, flight, family re-unification, deportation and Ethnic German resettlement were also included within the topic modelling because of the legal incorporation of them. In the step of cross-validation with LDA the topic model detected some more words as the qualitative analysis had provided. Relevant terms from the topic model were therefore also validated per checking the context (qualitative and quantitative) to guarantee disambiguity. Words from the topic model which refer to citizenship aspects were integrated in the dictionary consequently. Information reductions, through the loss of some search words that do not refer to citizenship only, are compensated by other included search words which often co-occur with these ones excluded. The dictionary thus can be used as a reliable and valid method for sampling those documents referring the unambiguous citizenship discourse for further analyses.
+
+(some 2500 words without citation, tables and figures)
+
+
+## References
+
+- Baker, P., 2006. Using Corpora in Discourse Analysis. London, New York: Continuum.
+
+- Baker, P., et al., 2008. A useful methodological synergy?: Combining critical discourse analysis and corpus linguistics to examine discourses of refugees and asylum seekers in the UK press. Discourse & Society, 19 (3), 273–306.
+
+- Berry, M., Garcia-Blanco, I., and Moore, K., 2016. Press coverage of the refugee and migrant crisis in the EU: A content analysis of five European countries. [Project Report]. Geneva: UNHCR.
+
+- Blaette, A., 2016. polmineR.
+
+- Bloemraad, I., Korteweg, A., and Yurdakul, G., 2010. Staatsbürgerschaft und Einwanderung: Assimilation, Multikulturalismus und der Nationalstaat. In: G. Yurdakul and Y.M. Bodemann, eds. Staatsbürgerschaft, Migration und Minderheiten: Inklusion und Ausgrenzungsstrategien im Vergleich. Wiesbaden: VS Verlag für Sozialwissenschaften / GWV Fachverlage GmbH, Wiesbaden, 13–46.
+
+- BMI Bund, 2019a. Einbürgerung [online], Bundesministerium des Innern, für Bau und Heimat. Availa-ble from: https://www.bmi.bund.de/DE/themen/verfassung/staatsangehoerigkeit/einbuerger-ung/einbuergerung-node.html [Accessed 8 Jul 2019].
+
+- BMI Bund, 2019b. Staatsangehörigkeit [online], Bundesministerium des Innern, für Bau und Heimat. Available from: https://www.bmi.bund.de/DE/themen/verfas-sung/staatsangehoerigkeit/staatsangehoerigkeit-node.html;jses-sionid=AE97B9769E479B9D3D9C80D1B5A62BCA.1_cid287 [Accessed 8 Jul 2019].
+
+- Bommes, M., 2000. Migration und Lebenslauf: Aussiedler im nationalen Wohlfahrtsstaat. Sozialwis-senschaften und Berufspraxis, 23 (1), 9–28.
+
+- Boomgaarden, J.G. and Vliegenthart, R., 2009. How news content influences anti-immigration attitudes: Germany, 1995-2005. European Journal of Political Research (48), 516–542.
+
+- Brubaker, R., 1992. Citizenship and nationhood in France and Germany. Cambridge, Mass. u.a: Har-vard Univ. Press.
+
+- Bubenhofer, N., 2006. Einführung in die Korpuslinguistik: Praktische Grundlagen und Werkzeuge [on-line]. Zürich, Mannheim, Dresden, ZHAW Zurich University of Applied Sciences. Availa-ble from: https://www.bubenhofer.com/korpuslinguistik/kurs/index.php?id=statistik_signif-ikanzLLR.html [Accessed 8 Jun 2019].
+
+- Budge, I., 2015. Issue Emphases, Saliency Theory and Issue Ownership: A Historical and Conceptual Analysis: [Abstract]. West European Politics, 38 (4), 761–777.
+
+- Burke, E., Canavan, F., and Payne, E.J., 1999. Select works of Edmund Burke: A new imprint of the Payne edition. Indianapolis, IN: Liberty Fund.
+
+- DWDS, 2019. Nation [online], Digitales Wörterbuch der deutschen Sprache. Availa-ble from: https://www.dwds.de/wb/Nation [Accessed 1 Jul 2019].
+
+- Dzankic, J., 2016. Migration, citizenship and post-national membership. In: A. Triandafyllidou, ed. Routledge Handbook of Immigration and Refugee Studies. New York, NY: Routledge, 163–168.
+
+- Entman, R., 1993. Framing: Towards clarification of a fractured paradigm. Journal of Communication, 43 (4), 51–58.
+
+- Foucault, M., 2016. Überwachen und Strafen: Die Geburt des Gefängnisses. 16th ed. Frankfurt am Main: Suhrkamp.
+
+- Green, S., 2004. The politics of exclusion: Institutions and immigration policy in contemporary Germany. In: C. Jeffery and C. Lees, eds. Issues in German Politics. Manchester: Manchester University Press.
+Esser, H., 1993. Soziologie.: Allgemeine Grundlagen. Frankfurt a. M.: Campus Verl.
+
+- Gries, T.S., 2009. Quantitative Corpus Linguistics with R: A Practical Intoduction: Taylor & Francis.
+
+- Habermas, J., 1993. Justification and application: Remarks on discourse ethics. Cambridge, Mass: MIT Press.
+
+- Hansen, G., 2001. Die Deutschmachung: Ethnizität und Ethnisierung im Prozess von Ein- und Ausgren-zungen. In: G. Hansen, R. Pfundtner, and N. Wenning, eds. Lernen für Europa. Münster/ New York/ München/ Berlin: Waxmann Verlag GmbH.
+
+- Helbling, M., 2012. Framing Immigration: Varieties of Arguments, Actors and Opportunity Structures. SSRN Electronic Journal.
+
+- Helbling, M., 2013. Validating integration and citizenship policy indices. Comparative European Poli-tics, 11 (5), 555–576.
+
+- Helbling, M., 2014. Framing Immigration in Western Europe. Journal of Ethnic and Migration Studies, 40 (1), 21–41.
+
+- Helfer, L., 2016. Media effects on politicians: An individual-level political agenda-setting experiment. The International Journal of Press/Politics, 21 (2), 233–252.
+
+- Hoffmann, W., Dose, N., and Wolf, D., 2015. Politikwissenschaft. 3rd ed. Konstanz und München: UTB.
+
+- Hunger, U., 2014. Migrations- und Integrationspolitik im europäischen Vergleich: Jahrbuch Migration - Yearbook Migration 2012/2013. Berlin [u.a.]: LIT.
+
+- Ignatow, G. and Mihalcea, R.F., 2017. Text mining: A guidebook for the social sciences. Los Angeles, London, New Delhi, Singapore, Washington DC, Melbourne: Sage.
+
+- Jacobs, D. and Rea, A., 2007. The end of national models? Integration courses and citizenship trajectories in Europe. International Journal on Multicultural Societies (IJMS), 9 (2), 264–283.
+
+- Jellinek, G. and Jellinek, W., 1914. Allgemeine Staatslehre: Algemeine Soziallehre des Staates. 3rd ed. Berlin.
+
+- Joppke, C., 1999. How immigration is changing citizenship: A comparative view. Ethnic and Racial Studies, 22 (4), 629–652.
+
+- Joppke, C., 2007. Beyond national models: civic integration policies for immigrants in Western Europe. Western European Politics, 30 (1), 1–22.
+
+- Katz, E. and Lazarsfeld, P.F., 1955. Personal influence: The part played by people in the flow of mass communications. New York, NY: Free Press.
+
+- Keating, M., 2009. Social citizenship, solidarity and welfare in regionalized and plurinational states. Citizenship Studies, 13 (5), 501–513.
+
+- Korte, K.-R. and Fröhlich, M., 2004. Politik und Regieren in Deutschland. Paderborn: Schöningh.
+
+- Koschyk, H. and Stolz, R., eds., 2001. Alte und neue Deutsche?: Staatsangehörigkeits- und Integrationspolitik auf dem Prüfstand. München: Hanns Seidel Stiftung e.V.
+
+- Kymlicka, W., 1996. Multicultural Citizenship: Oxford University Press.
+
+- Kymlicka, W. and Norman, W., 1994. Return of the Citizen: A Survey of Recent Work on Citizenship Theory; Survey Article. In: P. Singer, ed. Ethics: Oxford University Press, 104–352.
+
+- Michalowski, I., 2004. An Overview on Introduction Programmes for Immigrants in Seven European Member States. Amsterdam.
+
+- Mohr, K., 2005. Stratifizierte Rechte und soziale Exklusion von Migranten im Wohlfahrtsstaat / Strati-fied Rights and Social Exclusion of Migrants in the Welfare State. Zeitschrift für Soziologie, 34 (5), 219.
+
+- Reichel, D., ed., 2011. Staatsbürgerschaft und Integration: Die Bedeutung der Einbürgerung für MigrantInnen. Wiesbaden: VS Verlag für Sozialwissenschaften / Springer Fachmedien Wiesbaden GmbH, Wiesbaden.
+
+- Schmitz-Vardar, M., 2018. Regionale Differenzen in der gesellschaftlichen Integration. [submitted cur-rently not published].
+
+- Soysal, Y.N., 1994. Limits of Citizenship: Migrants and Postnational Membership in Europe: University of Chicago Press.
+
+- Soysal, Y.N., 1997. Limits of citizenship: Migrants and postnational membership in Europe. 2nd ed. Chicago u. a.: Univ. of Chicago.
+
+- Streeck, W. and Thelen, K., eds., 2005. Beyond Continuity: Institutional Change in Advanced Political Economies. Oxford, UK: Oxford Univ. Pr.
+
+- Tibi, B., 2002. Islamische Zuwanderung: Die gescheiterte Integration. Stuttgart, München: Deutsche Verlags-Anstalt GmbH.
+
+- Tsebelis, G., 1995. Decision Making in Political Systems: Veto Players in Presidentialism, Parliamentarism, Multicameralism and Multipartyism. British Journal of Political Science [online], 25 (3), 289–325. Available from: http://www.jstor.org/stable/194257.
+
+- Wlezien, C., 2005. On the salience of political issues: The problem with ‘most important problem’. Electoral Studies, 24 (4), 555–579.
+
+- Worbs, S., 2008. Die Einbürgerung von Ausländern in Deutschland: Integrationsreport. Working Paper 17. "Integrationsreport" Teil 3: Forschungsgruppe des Bundesamtes für Migration und Flüchtlinge.
+
+
+## Statutory declaration
+
+I herewith declare that I, Kevin Glock, Koloniestraße 158, 47057 Duisburg, Matriculation number: 30 52 487, have composed the present thesis myself and without use of any other than the cited sources and aids. Sentences or parts of sentences quoted literally are marked as such; other references regarding the statement and scope are indicated by full details of the publications concerned. The thesis in the same or similar form has not been submitted to any examination body and has not been published. This thesis was not yet, even in part, used in another examination or as a course performance.
+
+
+
+
+
+
+Kevin Glock									 Saturday, 29 June 2019
+
+
+
+## Appendix
+
+### Code
+
+------------------------------------------
+#### ".*[Aa]us.bürger.*"
+------------------------------------------
+
+```{r, message= F, eval= F, warning=F, echo=T}
+kwic(
+  "GERMAPARL",
+     query= '".*[Aa]us.*bürger.*"',
+     left= 10, right= 10, cqp= TRUE,
+     s_attribute= c(
+       "parliamentary_group", "speaker", "date", "url"),
+     interjection = FALSE, regex = TRUE) %>%
+highlight(
+     lightgreen= c(
+        "geflohen", "geflohene", "Wehrdienstes", "PaÃ", "Menschen", "DDR",
+        "Optionskinder", "Bestrebungen", "Rentenleistungen", "VermÃ¶genswerte",
+        "Auskunft", "Vertrauensschutz", "reformieren", "doppelte", "StaatsbÃ¼rgerschaft",
+        "tÃ¼rkische", "EU-BÃ¼rgerinnen", "ausgereist", "schÃ¤ndliche", "EntscheidungsmÃ¶glichkeit", "staatenlose",
+        "Baath-Regimes", "tagtÃ¤glich", "zwangsweise", "Enteignung", "Tschechoslowakei", "Dekrete", "Unrecht",
+        "Benes-Dekrete", "Vertreibung", "Sudetendeutschen", "Exzesse", "unschuldig", "Leid", "zugefÃ¼gt", "ehemaligen",
+        "ErklÃ¤rung", "Bundesregierungen", "Domaschk", "TÃ¼rkei", "EinschlÃ¤gige", "Vertei", "unschuldiges", "StaatsangehÃ¶riger",
+        "Wehrdienstes", "EinbÃ¼rgerungen", "tÃ¼rkischer", "Abschiebungen", "abgestellt", "vornimmt", "beeeinflussen", "erteilen",
+        "angesprochenen", "unvermindert", "anhÃ¤lt", "freigekaufte", "zermÃ¼rbendes", "HÃ¤ftlinge", "Westen", "zugeleitet",
+        "Abschaffung", "GebÃ¼hren", "StaatsangehÃ¶rigkeit", "entlassen", "Annahme", "verlangt", "Verlieren",
+        "Kriminellen", "Sachverhalte", "KreiÃsaal", "Mehrstaatlichkeit", "PaÃ", "Willkommenskultur", "zwangsweise",
+        "Schwarzen", "HomosexualitÃ¤t", "Fehlentwicklung", "Letztes", "Ã¼berwiegende", "erworben", "Rassismus", "abschieben",
+        "abgeschoben", "Abschiebung", "facto", "doppelte", "begangen", "schweren"),
+      regex = FALSE, interjection = FALSE
+      )
+```
+
+
+```{r, message= FALSE, eval= TRUE, warning=FALSE, echo=F}
+words2 <- c("infizierten",
+            "Dzembritski", "Eltern", "Fleischimporte", "geboren", "Männern", "Detlef", "Kälber", "Einwanderern",
+            "Kühen", "Illegale", "wohlhabenden", "Einwanderer", "Dass", "Fünf", "erleiden", "zufolge", "Kinder", "biologisch",
+            "Klärungsverfahrens", "anzuordnende", "Ausländer", "lateinischen", "Kind", "Übersetzt", "löse", "importieren", "Lebensabend",
+            "Tötung", "Wurzel", "bleibt", "erlangen", "Tier", "Tieren", "Klärung", "türkischer", "Rasse", "Geschlechtes", "Kenntnis", "Herkunft",
+            "Recht", "deutscher", "genetische", "Sprache", "Kind", "wegen", "Hautfarbe", "Kindes", "Feststellung", "Heimat",
+            "Vaterschaft", "Religion", "leiblichen", "Niemand", "Untersuchungsziel", "Identitätsfeststellung", "Staatsangehörigkeitsrechts",
+            "genetische", "unterschiedlichsten", "Modelle", "beschränkt", "Untersuchungen", "Zuchtmaterial", "Zuchttieren", "Tierzucht",
+            "Rates", "Handel", "Parlaments", "deren", "Europäischen", "geforderten", "vorzulegen", "schwierig", "Flüchtlinge",
+            "Personensorge", "Ausschussanhörung", "bereits", "viele", "Unterlagen", "heute", "Sachverständigen", "Erweiterung", "DNA-Analyse",
+            "van", "Essen", "angestellt", "Sowohl", "Untersuchungen", "Mutter", "Kind", "klären", "biologische", "privates", "Herkunft", "Kindes",
+            "klären", "Mendel", "Vortrag", "Weicht", "weibliche", "Juden", "üblichen", "Israel", "Anerkennung", "berücksichtigt",
+            "DNS-Gutachten", "Ordnungsamt", "Impfpass", "DNA-Test", "Bescheinigungen", "behördliche", "Hoffnungsschimmer", "Aufenthaltserlaubnis",
+            "Belege", "maßgeblichen", "Papiere", "biologischen", "Besitz", "sonstige", "Betroffene", "Kriterium", "Tiere", "erforderlichen",
+            "oftmals", "akzeptiert", "Kriegsfolgenschicksals", "perfekt", "Führen", "ferner", "unverändert", "allgemeinen", "geblieben",
+            "Teritorialprinzip", "Staatsangehörigkeit", "Staatsangehörigkeitsrecht", "Mehrfachstaatsangehörigkeiten", "deutsche", "Eltern",
+            "abschaffen", "Rhetorik", "Aydan", "wilhelminisch", "beweist", "Territorial", "angstbesetzte", "zwangsgermanisiert", "modernes",
+            "Staatsbürgerschaft", "ausländischer", "Blutsrecht", "Geburtsortes", "reaktionäres", "Rechtsprinzip", "Galt", "völkischen",
+            "Aussiedlern", "Staatsangehörigkeitsrechts", "Abkehr", "unbeschränktes", "Staatsbürgerschaftsrechtes", "Fernsehschirm",
+            "Sonnenuntergang", "abschaffen", "Anfechtungsrecht", "stückweise", "soli", "tagenden", "Beibehaltung", "Bekleidungssitten",
+            "gründlicheren", "Machokultur", "Herkunftsstaatsangehörigkeit", "umhängt", "wilhelminischen", "frauenfeindliche", "Doppelstaatler",
+            "Regelungen", "isolierte", "Teilbereich", "vorschnell", "weite", "Hierfür", "Verwandtschaftsverhältnissen", "Gentest", "unterziehen",
+            "biologischen", "Durchführung", "Feststellung", "dienen", "ausschließlich", "Königshäusern", "unumstrittenen",
+            "Vaterschaftstests", "anderswo", "sogenannten", "notwendigerweise", "Verfahrenspflegers", "erleichtertes", "niederschwelliges",
+            "förmliches", "Vaterschaftstests", "schlugen", "Anfechtung", "heimlichen", "heimliche", "Bestellung", "gebieten", "offenes", "Einhalt",
+            "Tests", "Auflösung", "anzubieten", "überflüssig", "Verfahrenspflegers", "Zweifels", "Bestellung", "genügen", "Durchführung",
+            "begründen", "schlagen", "Außerdem", "einwilligt", "Entnahme", "Duldung", "genetische", "Regelungsbedarf", "Einwilligung", "geeigneten",
+            "angeführt", "Untersuchung", "klares", "Mutter", "Prinzip", "Gendiagnostikgesetz", "Freiwilligkeit", "gewährleistet", "Anfechtungsverfahren",
+            "Gang", "öffentlich", "legitimes", "vermeintliche", "Strafrechts", "Väter", "klären", "Daher", "verwandelt", "Freiheitsrechte",
+            "Diktatur", "stand", "freiwilligen", "besteht", "Beweismittel", "belastenden", "Zusammenfassend", "vermeintlich", "Zwang", "Nachweis",
+            "erbracht", "Durchführung", "festzustellen", "vorliegende", "Forderung", "Möglichkeit", "weniger",
+            "Jenseits", "Familiennachzug", "praktischen", "verzichten", "fordert", "grundsätzlich", "wünschens", "unterstützenswert",
+            "begründeten", "binden", "Einschränkung", "Regierungsfraktionen", "Durchführung", "Zuchttiere", "Kennzeichnung", "verankern",
+            "Grundgesetzes", "Ernährung", "Überweisungsvorschlag", "Drucksache", "Ausschuss")
+
+kwic(
+  "GERMAPARL",
+  query= '".*[Aa]bstamm.*"',
+  left= 10, right= 10, cqp= TRUE,
+  s_attribute= c(
+    "parliamentary_group", "speaker", "year"),
+  interjection = FALSE, regex = TRUE) %>%
+highlight(lightgreen= words2,
+                 regex = TRUE, interjection = FALSE)
+
+```
+
+
+------------------------------------------
+####  ".*[Ee]in.*bÃ¼rger.*"
+------------------------------------------
+
+```{r, message= F, eval= F, warning=F, echo=T}  
+words1 <- c("StaatsangehÃ¶rigkeit", "erleichterte", "StaatsbÃ¼rgerschaft", "Integration", "Hinnahme",
+           "erleichtern", "doppelten", "Erleichterung", "Integrationsprozesses", "Migranten",
+           "doppelte", "Mehrstaatigkeit", "erleichterten", "Regelanfrage", "Voraussetzungen",
+           "HÃ¼rden", "Rechtsanspruch", "Erleichterungen", "AuslÃ¤nder", "lassen",
+           "EinbÃ¼rgerung", "einbÃ¼rgern", "laÃt", "Einwanderer",
+           "StaatsangehÃ¶rige", "diejenigen", "jemanden", "Migranten", "Pass", "Personen",
+           "eingebÃ¼rgert", "erfÃ¼llen", "EinbÃ¼rgerungshÃ¼rden", "Vereinspolitik", "integrationsbereiten",
+           "Menschen", "Zahl", "EinbÃ¼rgerungen", "gestiegen", "Jahr", "Ausgrenzungen", "Wahlrecht",
+           "Ausgrenzung", "umfassend", "erleichtert", "RÃ¼ckgang", "Anschauung", "Gesinnung", "innere",
+           "Ã¼berprÃ¼ft", "nachvollziehen", "EinbÃ¼rgerungstests", "testen", "vermeindliche",
+           "Geburt", "per", "Fremdenfreundlichkeit", "Duldungs", "islamistisch-fundamentalisitschen",
+           "Muslimtest", "Subkultur", "RechtsÃ¤nderung", "StaatsbÃ¼rgerschaftsrecht", "Jahresbeginn", "einhergehende",
+           "groÃzÃ¼gige", "StaatsangehÃ¶rige", "eingefÃ¼hrte", "verwehrt", "schlimme", "verletzen",
+           "religiÃ¶se", "jemanden", "irgend", "Kriterium", "HÃ¼rden", "IntegrationsbemÃ¼hungen", "befÃ¶rdert",
+           "entgegen", "meisten", "passende", "geborenen", "AuslÃ¤nderinnen", "Dokument", "Kanzleramt",
+           "Migranten", "Angelegenheit", "erstmals", "irrelevanter", "Ã¼berreichen", "Akt",
+           "Migrantinnen", "rechtlich", "stattgefunden", "auzunehmen", "Bundeskanzlerin", "EinbÃ¼rgerungszahlen",
+           "naturgemÃ¤Ã", "aufwachsen", "sinkende", "gesellschaftliche", "Ã¼berprÃ¼fen", "rechtlichen", "verlieren", "Teilhabe",
+           "EinbÃ¼rgerungsquoten", "Prozentual", "schlechtesten", "stieg", "dreimal", "stÃ¼tzen", "Schweden", "Deutschland",
+           "loszutreten", "begrÃ¼Ãenswert", "befÃ¼rwortet", "werben", "einbÃ¼rgern", "grundlegend", "scheitern",
+           "hinnehmen", "IdentitÃ¤tsstiftung", "gutheiÃen", "kÃ¶nne", "verstanden", "Schulabschluss",
+           "bildungsfernere", "verschiedene", "Verfassungstreue", "abgefragt", "Inwiefern", "Schulsystem",
+           "durchlaufen","Tests", "Frage", "Inwieweit", "nachweisen", "deutschen", "verschiedene",
+           "EinbÃ¼rgerungsbewerberinnen", "bewerber", "vermeiden", "BundeslÃ¤nder", "EinbÃ¼rgerung", "novellierte",
+           "Ermutigung", "Beauftragte", "Gesetzteslage", "aufklÃ¤ren", "KÃ¼rze", "bemÃ¼hen", "Integrationsgipfeln", "durchaus",
+           "Mehrstaatigkeit", "lebende", "Festhalten", "verkÃ¼rzt", "ideologische", "Fristen",
+           "Selbstverpflichtung", "GebÃ¼hren", "VerschÃ¤rfung", "Vermeidung", "Themas", "Belehrungsbedarf",
+           "willkommen", "stehe", "derjenige", "SPD-Bundestagsfraktion", "verankert",
+           "EinbÃ¼rgerungskurse", "angeforderte", "vorgeschlagenen", "geplante", "absurde", "ZÃ¼ge",
+           "verweise", "aktuellen", "StaatsbÃ¼rgerkursen", "Leibe", "rÃ¼cken", "Ã¼berprÃ¼fen",
+           "Gesinnungstests", "einbÃ¼rgerungswilligen", "gehend", "Irre", "nÃ¼tzen",
+           "bilaterales", "Austausch", "verhandeln", "Abkommen", "abzulegen", "Grundgesetz", "eingefÃ¼hrt",
+           "Fluss", "abgearbeitet", "abzubauen", "debattieren", "beklagt", "EinbÃ¼rgerungsverfahren",
+           "human", "beseitigt", "EinbÃ¼rgerungshindernis", "gestaltet", "beseitigten", "gestalten", "Gesetzeswerk",
+           "wirkungsvoll", "InnenausschuÃ", "Placebo", "vermeidet", "Optionsmodell", "bekommt", "Kinderausweis",
+           "Unionsentwurfes", "VerlustgrÃ¼nde", "Kinder", "auslÃ¤ndischen", "AuslÃ¤ndergeneration", "beantragt",
+           "eigentliche", "Gutschein", "Alternative", "vorzuenthalten", "Modell", "auffÃ¼hrt", "Optionsmodells",
+           "wertlos", "Irrglauben", "Leistungen", "derjenigen", "Ausnhamen", "gemeint", "Ziffern", "Seminar",
+           "Gesetzestext", "Ã¼berfÃ¼hrt", "geltendes", "veranstalten", "abhÃ¤ngen", "Interpretation", "vorlesen",
+           "VerkÃ¼rzung", "Territorialprinzips", "AnspruchseinbÃ¼rgerungen", "Vertriebene", "HÃ¤rtefÃ¤lle",
+           "Kernpunkte", "hinlÃ¤nglich", "einrÃ¤umt", "Aussiedler", "Ausnahmeregelung", "verkÃ¼rzen", "Erwachsene", "verkÃ¼rtzt",
+           "verbesserte", "deutlichen", "wirkliche", "Stellenwert", "denkt", "ausgehen", "letztlich", "aufgetauchte",
+           "KinderstaatszugehÃ¶rigkeit", "verunglÃ¼ckte", "Koalitionsvertrages", "Variante", "jÃ¼ngst", "Aufstockung",
+           "Lebensjahr", "sinnvolle", "Rechtslage", "frÃ¼here", "Selbststudium", "AndersglÃ¤ubigen",
+           "EinbÃ¼rgerungsvoraussetzungen", "angehobenen", "FuÃballnationalmannschaft", "verfassungsfeindlichen",
+           "Rechtstreue", "erfragen", "aufnehmenden", "EinbÃ¼rgerunstest", "berÃ¼cksichtigt", "Verfassungsordnung",
+           "Potenzials", "sachgerechter", "Hinwendung", "skandalÃ¶sen", "Gesinnungstest", "Sprachniveau", "miserable",
+           "representative", "ausdehnen", "Vorschrift", "Befragung", "abwarten", "absurd", "erfÃ¼llen", "Sprachkenntnisse",
+           "erschwert", "Staats-angehÃ¶rigkeit", "EinbÃ¼rgerungsverhalten", "Hildesheimer", "anforderungen",
+           "EinbÃ¼rgerungsantrag", "ausreichende", "annehmen", "Absenkung", "EinbÃ¼rgerungsbewerber",
+           "EinbÃ¼rgerungsbehÃ¶rden", "Ermessensentscheidung", "LoyalitÃ¤t", "Untersuchungen",
+           "EinbÃ¼rgerungsvoraussetzungen", "Forschungsgruppe", "Optionsregelung", "Ã¼bertriebenen",
+           "integrationspolitischen", "Betrachtet", "unionsgefÃ¼hrten", "vernachlÃ¤ssigt",
+           "auswirken", "wider", "wissenschaftliche", "umfasst", "allgemein", "vergleichbar", "bÃ¼rokratischen",
+           "stehnden", "Aufwand", "FÃ¤lle", "angeht", "Regelanfrage", "EinbÃ¼rgerungshindernisse",
+           "verfassungsschutz", "Strafvorschrift", "RechtsansprÃ¼che", "Ermessensregelungen",
+           "BehÃ¶rdenpraxis", "Ayslstatus", "TÃ¤uschungsversuche", "bundesweit", "Gebrauchsanweisung",
+           "Bundeseinheitliche", "Rechtssystematik", "Optionspflichtige", "FlÃ¼chtlinge", "Optionsregelung",
+           "Bundeamts", "reprÃ¤sentativen", "MitbÃ¼rgern", "befragt", "Bundesamt", "belegen",
+           "baden-wÃ¼rttembergischen", "erhebliche", "Wissensfragen", "handhabenden",
+           "EntlassungsbemÃ¼hungen", "GesprÃ¤chsleitfaden", "Landesregierung", "EinbÃ¼rgerungsvoraussetzungen",
+           "lahmlegen", "ansÃ¤ssiger", "unkomplizierte", "Aufweichen", "Mehrstaatlichkeit", "entwertet",
+           "ErmÃ¶glichung", "Aufweichung", "Briten", "generelle", "weiten", "drittens", "akzeptiert",
+           "weiten", "Teilen", "akzeptiert", "BevÃ¶lkerung", "Explosionsstoffgesetz", "Staatsgesellschaft",
+           "zurÃ¼cknÃ¤hme", "dazuzugehÃ¶ren", "integrationspolitisch", "Iraner", "erleichterte", "vertiefte", "SpÃ¤taussiedlern",
+           "verschweigt", "Lebenspartner", "kleinreden", "Zukunftschancen", "HerkunftsstaatsangehÃ¶rigkeit",
+           "MittelmaÃ", "extremen", "bescheinigt", "folgendermaÃen", "Integrationspolitik", "abzugeben", "europÃ¤isches",
+           "europÃ¤ischen", "schlechtesten", "Vergleich", "EinbÃ¼rgerungsrate", "Prozentual", "Neunte",
+           "Eu-AuslÃ¤nder", "woraus", "StaatsangehÃ¶riger", "tÃ¼rkischer", "resultieren", "Statistischen",
+           "niedriegsten", "Deutschland", "verantwortungslose", "dreimal", "Migrationshintergrund",
+           "dopplete", "differenziert", "niedrige", "normal", "Niveau", "UnterhaltungsfÃ¤higkeit",
+           "EinbÃ¼rgerungsbewerbern", "AuslÃ¤nderin", "eingebÃ¼rgerten", "unabhÃ¤ngig", "Straflosigkeit",
+           "entlarvend", "rechtmÃ¤Ãig", "verkÃ¼rzt", "eigenstÃ¤ndigen", "generelle", "MitbÃ¼rger",
+           "erworben", "lebenden", "Quizshow", "Hauptschulabschluss", "Test", "bestanden",
+           "StaatsangehÃ¶rigkeitsgesetz", "EinbÃ¼rgerungstest", "Teilnahme", "Staatsaufbau",
+           "bestehen", "abgelegt", "ablegen", "Tests", "Orientierungskurses", "partizipierenden",
+           "HÃ¼rde", "Schulabschluss", "testweise", "abschreckend", "Ausgestaltung", "Nichtvorliegens",
+           "beteiligen", "Zahlen", "PrÃ¼fungsfragen", "beantworte", "Orientierungskursen", "Erfolgsschlager",
+           "Absolvierung", "Schulferien", "albernen", "Pools", "DÃ¤monisierung", "wirken", "Teilnahme",
+           "Voraussetzung", "IMK", "vorbereitenden", "Test", "IMK-Beschlusses", "Lehrstoff", "Selbststudium",
+           "Teilnahme", "IMK-Beschluss", "Orientierungskursen", "betraute", "angeforderte", "geplante",
+           "Planung", "Gesinnungstest", "organisiert", "Vorbereitung", "EinbÃ¼rgerungsbewerber",
+           "Schulferien", "Curriculum", "EinbÃ¼rgerungsoffensive", "Einwanderungsoffensive", "sprechen",
+           "vornehmen", "felsenfesten", "Pappkameraden", "dezidiert", "Ã¼berwiegende", "unmiÃverstÃ¤ndlichen",
+           "NeubÃ¼rger", "nachdrÃ¼cklichen", "verlangen", "zugleich", "SelbstlÃ¤ufer", "dahinter", "steckt",
+           "Augsburg", "EinbÃ¼rgerungszahlen", "zurÃ¼ckgegangen", "EinbÃ¼rgerung", "dramatisch", "gesunken",
+           "FÃ¼nftel", "sinkende", "Durchschnittswerte", "Inkrafttreten", "Tiefstand", "EinbÃ¼rgerungen",
+           "RÃ¼ckgang", "Jahrzehnts", "FrÃ¼hjahrszeitrÃ¤umen", "reformbedingte", "diametraler",
+           "EinbÃ¼rgerungsrechts", "modernes", "Ã¼berprÃ¼fen", "VerschÃ¤rfungen", "Hemmnisse",
+           "VÃ¶lkisch", "PKK-KÃ¤mpfer", "getreten", "Belange", "behÃ¶rdliches", "Teilhaberechte",
+           "EinbÃ¼rgerungsverfahren", "Erschwernisse", "ebnet", "aufenthaltsrechtliche",
+           "strÃ¤uben", "reformierte", "groÃzÃ¼gigsten", "liberalsten", "Integrationsleistung",
+           "Drittstaatler", "nachweisbare", "Unverzichtbar", "Projektarbeit", "kommunales",
+           "HÃ¼rden", "geringe", "Unzumutbarkeiten", "Eingewanderte", "AuslÃ¤nderfragen",
+           "EinbÃ¼rgerungszahlen", "vorzuenthalten", "Arbeitskreises", "eingebÃ¼rgert",
+           "unseres", "Test", "HerzstÃ¼ck", "WiderstÃ¤nde", "liberalen", "erlangen",
+           "insbesondere", "Votum", "demokratischer", "Bundesamt", "zusammengestellten",
+           "Mehrstaatigkeit", "weitergeleitet", "Statistische", "Statistischen",
+           "Erstellung", "deutschem", "eindrucksvoll", "Migrationshintergrund",
+           "generell", "tÃ¼rkischstÃ¤mmigen", "Plenum", "einbringen", "grÃ¶Ãte",
+           "StaatsangehÃ¶rigkeitsrecht", "StaatsangehÃ¶rigkeitsrechts", "enthaltenen",
+           "umfassender", "Integrationspolitik", "Bundesregierung", "einladende",
+           "Einwanderungspolitik", "eingebÃ¼rgert", "scheut", "plÃ¤dieren", "modernes", "Sachverhalt",
+           "sanguinis", "Rennpferd", "ius", "Anwerbeabkommens", "VerstÃ¶Ãen", "ablehne", "fÃ¤llige",
+           "Lebensmittelpunkt", "EinbÃ¼rgerungen", "gleichberechtigten", "ungeachtet", "enthaltenden",
+           "umfassender", "Intregationspolitik", "Bundesregierung", "korregiert", "wesentlichen",
+           "entwickelt", "Zuspitzung", "KomplexitÃ¤t", "Problematik", "dient", "symbolischen", "senken",
+           "Aufenthaltsfristen", "verzichten", "symbolisches", "EinbÃ¼rgerungstest", "KrÃ¶nung", "betrÃ¤chtlich",
+           "vereinfachen", "verkÃ¼rtzt", "EU-Staaten", "insoweit", "Bellevue", "Schloss", "BundesprÃ¤sident",
+           "Rede", "eingebÃ¼rgert", "US-amerikanische", "bemerkenswerte", "Gauck", "Roth", "Winkler", "Wulff", "Maas", "anlÃ¤sslich",
+           "Merkel", "Gewicht", "letztes", "eingeladen", "Domenico", "Inlandsaufenthaltes",
+           "anzufragen", "EinbÃ¼rgerungsvoraussetzungen", "AuslÃ¤nders", "Costa", "MutmaÃungen",
+           "Bundesverwaltungsgerichtes", "beschieden", "Motiven", "angegeben", "Besten", "AuslÃ¤ndern",
+           "unterliegt", "stellen", "Einwanderungsgesellschaft", "menschennahen", "einladenden", "modernen",
+           "gleichrangige", "leichtfertige", "skurril", "Zauberwort", "EingleiderungsmaÃnahmen", "intakten",
+           "abschreckende", "gerecht", "GesetzesbegrÃ¼ndung", "puncto", "FDP-Antrag", "Politikerinnen",
+           "Integrationspolitik", "Sprachkenntnisse", "materielle", "Zwang", "Vorteile", "verfÃ¼gen",
+           "rechtliche", "Ã¼berzeugend", "alt", "Grindel", "praktisch", "Rentner", "angeblich", "Migranten",
+           "StaatsbÃ¼rgerschaft", "Hinnahme", "AuslÃ¤nder", "EinbÃ¼rgerung",
+           "Mehrstaatigkeit", "Voraussetzungen", "Lebensjahr", "StaatsangehÃ¶rigkeit", "Begriff",
+           "FlÃ¼chtlingsstatus", "Iraner", "el-Masri", "leben", "einbÃ¼rgern",
+           "unkompliziert", "zehnte", "AuslÃ¤nderinnen", "StaatsangehÃ¶rige", "EinbÃ¼rgerungsgesetz",
+           "AuslÃ¤nderzentralregister", "sozioÃ¶konomische", "BildungsabschlÃ¼sse", "Lebensunterhalts", "rassistisch",
+           "gÃ¼nstigere", "VerschÃ¤rfungen", "Einfach", "festzuschreiben", "Merkmale", "Befund", "ausweisen", "diskriminiert",
+           "Nachhinein", "erfolgreicher", "Statistiken", "TÃ¼rken", "Pass", "TÃ¼rkin", "eingebÃ¼rgerten", "lebenden",
+           "Deutschen", "AuslÃ¤ndern", "TÃ¼rkischstÃ¤mmigen", "NichtseÃhaften", "GÃ¼terstÃ¤nden", "deutschen",
+           "EinbÃ¼rgerungsanspruch", "Abstammungsprinzip", "nachziehende", "zugewanderten", "tÃ¼rkischstÃ¤mmigen",
+           "TÃ¼rkinnen", "trifft", "Studie", "Doppelstaatler", "Prozent", "Beibehaltung", "anforderungen",
+           "Geburtsjahrgang", "separat", "Praxis", "Nachzug", "alten", "Nunmehr", "durchgefÃ¼hrte", "ausblenden", "Deutschland",
+           "formale", "Menschen", "EinbÃ¼rgerung", "Kinder", "Jahre", "AuslÃ¤nder", "Begriff", "Hinnahme", "leben", "Personen",
+           "Zahl", "Mehrstaatlichkeit", "Voraussetzungen", "Prozent")
+
+kwic(
+  "GERMAPARL",
+  query= '".*[Ee]in.*bürger.*"',
+  left= 10, right= 10, cqp= TRUE,
+  s_attribute= c(
+    "parliamentary_group", "speaker", "date", "url"),
+  interjection = FALSE, regex = TRUE
+  ) %>%
+highlight(
+  lightgreen = words1,
+  regex = FALSE, interjection = FALSE
+  )
+```
+
+
+------------------------------------------
+####  "[Ss]taatenlos.*"
+------------------------------------------
+
+```{r, message= F, eval= F, warning=F, echo=T}  
+kwic(
+  "GERMAPARL",
+    query= '"[Ss]taatenlos.*"',
+    left= 10, right= 10, cqp= TRUE,
+    s_attribute= c(
+      "parliamentary_group", "speaker", "date", "url"),
+    interjection = FALSE, regex = TRUE) %>%
+highlight(
+    lightgreen= c(
+      "staatenlose", "Kurden", "Syrien", "StaatangehÃ¶rige", "Palistinenser", "doppelt", "Baath-Regimes",
+      "radikalisierten", "Puntland", "ausgebÃ¼rgert", "konsularische", "Rechtsnorm", "zerfallenden", "Personen",
+      "stammende", "hinfÃ¤llig", "leben", "gescheiterte", "abgeschobenen", "RÃ¼ckfÃ¼hrung",
+      "Syrerinnen", "Syrern", "gewÃ¶hnlichen", "DrittstaatenangehÃ¶rigen", "demgegenÃ¼ber", "Ãbereinkommens",
+      "Abschiebung", "Aufenthalt", "vermeintlich", "Roma", "Text", "Minestnormen", "anderweitig", "Status",
+      "Schutz", "Anerkennung", "FlÃ¼chtlinge", "internationalen", "Ausreisepflichtiger", "RÃ¼ckÃ¼bernahme",
+      "Damaskus", "allerletzte", "FlÃ¼chtlings", "AuslÃ¤nderbehÃ¶rden", "StaatangehÃ¶rigen",
+      "FlÃ¼chtlingskonvention", "DurchbefÃ¶rderung", "DrittstaatenangehÃ¶riger", "Komponenten",
+      "Somit", "Ãbernahme", "eigener"),
+    regex = FALSE, interjection = FALSE
+    )
+```
+
+
+------------------------------------------
+####  "[Ss]taatsbürger.*"
+------------------------------------------
+
+```{r, message= F, eval= F, warning=F, echo=T}  
+words2 <- c(
+    "Kosovo", "Wahlen", "kosovarisch-serbischen", "beteiligen", "binationalen", "Stimmabgabe", "EU-BÃ¼rger", "serbischen", "lebenden", "aufgerufen",
+    "geboren", "Mutter", "bekommt", "Kind", "geschehen", "Terrororganisation", "StaatsbÃ¼rgerschaft", "Verlust", "kÃ¤mpfen", "nenne",
+    "Ausland", "Lorenzo", "Giovanni", "einzubÃ¼rgern", "bringt", "di", "Hinnahme", "Probleme", "angeklungen", "durften", "aufhalten",
+    "StaatsangehÃ¶rigkeit", "eingebÃ¼rgerte", "EingebÃ¼rgerten", "Listen", "cleveren", "illegalen", "StaatsangehÃ¶rigkeiten", "LoyalitÃ¤t", "PÃ¤sse",
+    "Bekleidungssitten", "illegaler", "Spannungen", "hingenommen", "Haydar", "Machokultur", "Mehrstaatler", "heranzÃ¼chten", "Ernstes", "terroristische",
+    "Problemlos", "deutsches", "Penner", "Millionen", "Fehdehandschuh", "StaatsangehÃ¶rigkeit", "zwei", "Personalausweisgesetztes",
+    "AnspruchseinbÃ¼rgerung", "hingeworfen", "groÃangelegte", "LoyalitÃ¤tskonflikte", "geraume", "muÃt", "StaatsangehÃ¶rigkeitsgesetz", "Konfliktfall",
+    "Diktion", "Gegenargument", "Mikrozensus", "denkbare", "StaatsangehÃ¶riger", "gezielte", "betrÃ¤gt", "19jÃ¤hrigen", "Wehrdienst", "plÃ¶tzlich",
+    "leistet", "dritten", "Doppelstaatlichkeit", "Streitpunkt", "hinzunehmen", "Sendboten", "engherzige", "Definieren", "Namentlich", "Ã¼belste",
+    "vermÃ¶gensrechtliche", "nÃ¤herzukommen", "Notwenigkeit", "Mehrstaatlichkeit", "bestimmten", "Paulus", "reformschritt", "Damaskus", "FÃ¤llen",
+    "unbegrenzten", "millionenfach", "zerrissen", "millionenfache", "hierdurch", "irgendwelche", "BegrÃ¼ndung", "entstehen",
+    "StaatsangehÃ¶rigkeitsrecht", "erwerben", "groÃem", "bietet", "MaÃe", "verfallen", "Irrtum", "Migranten", "privilegiert", "Betreffenden",
+    "Integration", "kÃ¶nne", "StaatsbÃ¼rger", "erschwert", "integriert", "Jus", "Adelsprivileg", "politisch", "reaktionÃ¤res", "gleichzeitig",
+    "sollen", "StaatsangehÃ¶rigkeit", "Rechtsprinzip", "sanguinis", "frohlocken", "hochkomplexe", "denen", "tÃ¤glichen", "Lebens", "akzeptieren",
+    "abgeschlossen", "Nurdeutsche", "Berti", "Vogts", "UnverhÃ¤ltnismÃ¤Ãig", "bestimmten", "Nationalmannschaft", "bereichern", "Ãmtern",
+    "Schmalz-Jacobson", "StaatsbÃ¼rger", "Landschaft", "Leitung", "Gerichten", "klarmachen", "Wohnsitz", "Pflichten", "festen", "richten",
+    "Rechte", "einfach", "Privileg", "ganz", "generellen", "DoppelstaatsbÃ¼rgerschaft", "erleichterte", "flÃ¤chendeckender", "EinbÃ¼rgerung",
+    "betrachtend", "FÃ¼Ãe", "bayrische", "StaatsbÃ¼rgerschaft", "Selin", "Iran", "Schily", "Kopf", "deutsche", "akzeptieren", "AuslÃ¤nderkriminalitÃ¤t",
+    "LÃ¤nderinteressen", "entlÃ¤sst", "Freundlichkeit", "Kampfansage", "ius", "soli", "Aufenthaltsstatus", "Bundesgebiet", "erwerben", "Geburt",
+    "zugelassen", "Papier", "verstÃ¤rkt", "Erde", "Bundesrepublik", "sogenannte", "LÃ¤ndern", "Deutschland", "abgeschlossen", "vorhandener",
+    "RÃ¼cksicht", "Gestatten", "Einzelfall", "Konflikt", "gelöst", "Bundeswehr", "Uniform", "deutsch", "Leitbild", "FÃ¼hrung", "inner",
+    "Soldat", "StaatsbÃ¼rger", "StreitkrÃ¤fte", "Prinzip", "tÃ¼rkisch", "Vereinigung", "CDU", "Unterricht", "Bildung", "Recht",
+    "Pflicht", "politische", "deutsche", "tÃ¼rkische", "syrische", "auslÃ¤ndische", "Visumpflicht", "britische", "TÃ¼rkei", "iranische",
+    "Ausland", "entfÃ¼hrt", "Visumfreiheit", "Kurzaufenthalt", "Aufenthalt", "Deutschland", "Opfer", "AuslÃ¤nder", "FÃ¼rsorgeabkommens",
+    "Visafreiheit", "konsularische", "tÃ¼rkischen", "deutschen", "StaatsangehÃ¶rigen", "eigenen", "Staaten", "StaatsangehÃ¶rigkeit",
+    "lebenden", "ausreisepflichtigen", "tÃ¼rkischer", "mazedonischen", "Hoheitsgebiet", "serbischen", "Ehegattennachzug", "Mehrstaatigkeit",
+    "Ehegatten", "syrischen", "Einreise", "Mitgliedstaats", "deutscher", "tÃ¼rkischer", "Kurzaufenthalte", "Einreise", "Auslieferung", "auslÃ¤ndischer",
+    "Evakuierung", "konsularischer", "assoziationsrechtlichen", "befindlicher", "RÃ¼ckfÃ¼hrung", "Rechtsstatus", "Bundesdienststellen",
+    "visumfreie", "Gefangentransporte", "Obhut", "eigener")
+
+kwic(
+  "GERMAPARL",
+    query= '"[Ss]taatsbürger.*"',
+    left= 10, right= 10, cqp= TRUE,
+    s_attribute= c(
+      "parliamentary_group", "speaker", "date", "url"),
+    interjection = FALSE, regex = TRUE) %>%
+highlight(
+    lightgreen= words2,
+    interjection = FALSE, regex = FALSE
+    )
+```
+
+
+------------------------------------------
+####  "[Dd]oppel(.*|[])staat.*"
+------------------------------------------
+  
+```{r, message= F, eval= F, warning=F, echo=T}
+kwic(
+  "GERMAPARL",
+    query= c('"[Dd]oppelstaat.*"|"[Dd]oppelt.*" [] "[Ss]taat.*"| "[Dd]oppel.*" "[Ss]taat.*"'),
+    left= 10, right= 10, cqp= TRUE,
+    s_attribute= c(
+      "parliamentary_group", "speaker", "date", "url"),
+    interjection = FALSE, regex = TRUE) %>%
+  highlight(
+    lightgreen= c(
+      "Kosovo", "Wahlen", "kosovarisch-serbischen", "beteiligen", "binationalen", "Stimmabgabe",
+      "EU-Bürger", "serbischen", "lebenden", "aufgerufen", "geboren", "Mutter", "bekommt", "Kind", "geschehen",
+      "Terrororganisation", "Staatsbürgerschaft", "Verlust", "kÃ¤mpfen", "nenne", "Ausland", "Lorenzo",
+      "Giovanni", "einzubürgern", "bringt", "di", "Hinnahme", "Probleme", "angeklungen", "durften", "aufhalten",
+      "Staatsangehörigkeit", "eingebürgerte", "Eingebürgerten", "Listen", "cleveren", "illegalen",
+      "Staatsangehörigkeiten", "Loyalität", "Pässe", "Bekleidungssitten", "illegaler", "Spannungen",
+      "hingenommen", "Haydar", "Machokultur", "Mehrstaatler", "heranzÃ¼chten", "Ernstes", "terroristische",
+      "Problemlos", "deutsches", "Penner", "Millionen", "Fehdehandschuh", "StaatsangehÃ¶rigkeit", "zwei",
+      "Personalausweisgesetztes", "Anspruchseinbürgerung", "hingeworfen", "großangelegte", "Loyalitätskonflikte",
+      "geraume", "mußt", "StaatsangehÃ¶rigkeitsgesetz", "Konfliktfall", "Diktion", "Gegenargument",
+      "Mikrozensus", "denkbare", "StaatsangehÃ¶riger", "gezielte", "betrügt", "19jährigen", "Wehrdienst",
+      "plötzlich", "leistet", "dritten", "Doppelstaatlichkeit", "Streitpunkt", "hinzunehmen", "Sendboten",
+      "engherzige", "Definieren", "Namentlich", "übelste", "vermögensrechtliche", "näherzukommen",
+      "Notwenigkeit", "Mehrstaatlichkeit", "bestimmten", "Paulus", "reformschritt", "Damaskus", "Fällen",
+      "unbegrenzten", "millionenfach", "zerrissen", "millionenfache", "hierdurch", "irgendwelche",
+      "Begründung", "entstehen", "Staatsangehörigkeitsrecht", "erwerben", "großem", "bietet", "Maße",
+      "verfallen", "Irrtum", "Migranten", "privilegiert", "Betreffenden", "Integration", "könne", "Staatsbürger",
+      "erschwert", "integriert", "Jus", "Adelsprivileg", "politisch", "reaktionäres", "gleichzeitig", "sollen",
+      "Staatsangehörigkeit", "Rechtsprinzip", "sanguinis", "frohlocken", "hochkomplexe", "denen", "täglichen",
+      "Lebens", "akzeptieren", "abgeschlossen", "Nurdeutsche", "Berti", "Vogts", "UnverhÃ¤ltnismäßig", "bestimmten",
+      "Nationalmannschaft", "bereichern", "Ämtern", "Schmalz-Jacobson", "Staatsbürger", "Landschaft", "Leitung",
+      "Gerichten", "klarmachen", "Wohnsitz", "Pflichten", "festen", "richten", "Rechte", "einfach", "Privileg",
+      "ganz", "generellen", "Doppelstaatsbürgerschaft", "erleichterte", "flächendeckender", "Einbürgerung",
+      "betrachtend", "Fälle", "bayrische", "Staatsbürgerschaft", "Selin", "Iran", "Schily", "Kopf", "deutsche",
+      "akzeptieren", "Ausländerkriminalität", "Länderinteressen", "entlässt", "Freundlichkeit", "Kampfansage",
+      "ius", "soli", "Aufenthaltsstatus", "Bundesgebiet", "erwerben", "Geburt", "zugelassen", "Papier", "verstärkt",
+      "Erde", "Bundesrepublik", "sogenannte", "Ländern", "Deutschland", "abgeschlossen", "vorhandener", "Rücksicht",
+      "Gestatten", "Einzelfall", "Konflikt", "gelöst"),
+    regex = FALSE, interjection = FALSE
+    )
+```
+
+
+------------------------------------------
+####  ".*[Ss]taats(ange|zuge).*"
+------------------------------------------
+
+```{r, message= F, eval= F, warning=F, echo=T}
+kwic(
+  "GERMAPARL",
+    query= '".*[Ss]taats(ange|zuge).*"',
+    left= 10, right= 10, cqp= TRUE,
+    s_attribute= c(
+      "parliamentary_group", "speaker", "date", "url"),
+    interjection = FALSE, regex = TRUE) %>%
+highlight(
+    lightgreen= c(
+      "deutsche", "türkische", "syrische", "ausländische", "Visumpflicht", "britische", "Türkei", "iranische",
+      "Ausland", "entführt", "Visumfreiheit", "Kurzaufenthalt", "Aufenthalt", "Deutschland", "Opfer", "Ausländer",
+      "Fürsorgeabkommens", "Visafreiheit", "konsularische", "türkischen", "deutschen", "Staatsangehörigen",
+      "eigenen", "Staaten", "Staatsangehörigkeit", "lebenden", "ausreisepflichtigen", "türkischer", "mazedonischen",
+      "Hoheitsgebiet", "serbischen", "Ehegattennachzug", "Mehrstaatigkeit", "Ehegatten", "syrischen", "Einreise",
+      "Mitgliedstaats", "deutscher", "türkischer", "Kurzaufenthalte", "Einreise", "Auslieferung", "ausländischer",
+      "Evakuierung", "konsularischer", "assoziationsrechtlichen", "befindlicher", "Rückführung", "Rechtsstatus",
+      "Bundesdienststellen", "visumfreie", "Gefangentransporte", "Obhut", "eigener", "Haltern", "Österreicher",
+      "vorläufige", "Petitionsrecht", "vorgibt", "Einbürgerung", "Geldbeutel", "Erwerb", "unterschreiben",
+      "Ausländer", "doppelten", "Letzte", "Konvention", "Entscheidende", "zugehörigkeit", "angekündigten", "sogenannte",
+      "Einwanderern", "wollten", "Kinder", "Geburt", "aufgetauchte", "Einbürgerungsgarantie", "Minimallösungen",
+      "Schrittchen", "verunglückte", "Totgeburten", "Fehlgeburten", "Meint", "einstmals", "bezweckt", "schwanger",
+      "Einführung", "merkwürdigen", "geborene", "schiebt", "Variante", "jüngst", "nötige", "vorhandener", "Rücksicht",
+      "Gestatten", "Einzelfall", "Konflikt", "gelöst"),
+    regex = FALSE, interjection = FALSE
+    )
+```
+
+------------------------------------------
+####  "[Ii]us"
+------------------------------------------
+  
+```{r, message= F, eval= F, warning=F, echo=T} 
+kwic(
+  "GERMAPARL",
+    query= '"[Ii]us"',
+    left= 10, right= 10, cqp= TRUE,
+    s_attribute= c(
+      "parliamentary_group", "speaker", "date", "url"),
+    interjection = FALSE, regex = TRUE) %>%
+highlight(
+    lightgreen= c(
+      "soli", "sanguinis", "Staatsangehörigkeitsrecht", "Abkömmlinge", "moderne", "Geburtsortprinzips",
+      "Einwanderungskonzept", "Territorialprinzips", "bello", "geboren", "wilhelminische", "bellum", "fortwirken",
+      "Geburtsrechts", "Zufälligkeit", "achtjährigen", "ius", "Territorialprinzip", "Geburtsrecht", "Untersuchung", "trat",
+      "ad", "Seitdem", "Neben", "Deutscher", "Staatsbürgerschaftsrechts", "Hinnahme", "Mehrstaatigkeit", "hieraus",
+      "Staatsangehörigkeitsrechts", "Doppelstaatsbürgerschaften", "Staatsbürger", "Blutsrecht", "überfällig",
+      "Einbürgerungserleichterungen", "Beide", "Soli", "Jus", "tizministerin", "tizministerium", "Fortschrittlich",
+      "unechten", "diametralen", "Ãffnung", "Doppelstaatsangehörigkeit", "echtes", "Abkehr", "Richtung", "stoppt", "überzugehen",
+      "Justizhaushalt", "Optionsmodell", "liberales", "Arbeitsanreize", "Arbeitnehmerüberlassungsgesetz", "blauen", "geringere",
+      "abgelaufen", "Lohnnebenkosten"),
+    regex = FALSE, interjection = FALSE
+    )
+```
+
+
+--------------------------------------------
+#### "[Oo]ptions(modell|pflicht).*"
+--------------------------------------------
+
+```{r, message= F, eval= F, warning=F, echo=T}
+kwic(
+  "GERMAPARL",
+    query= '"[Oo]ptions(modell|pflicht).*"',
+    left= 10, right= 10, cqp= TRUE,
+    s_attribute= c(
+      "parliamentary_group", "speaker", "date", "url"),
+    interjection = FALSE, regex = TRUE) %>%
+highlight(
+    lightgreen= c(
+      "Optionsmodell", "Staatsangehörigkeitsrecht", "Staatsangehörigkeit", "Personengesellschaften",
+      "abschaffen", "Betriebssteuer", "Bedenken", "Modell", "Personenunternehmen", "Einbürgerungszusicherung",
+      "bürokratischer", "Justizministern", "evaluieren",  "entfristen", "ernstzunehmenden", "entschieden", "Jus",
+      "optieren", "rechnet", "Hinnahme", "Abschaffung", "Staatsbürgerschaft", "abgeschafft", "Mehrstaatigkeit",
+      "befreit", "abschaffen", "aufgewachsene", "Optionspflicht", "abzuschaffen", "aufgewachsen", "doppelte",
+      "Staatsbürgerschaftsrecht", "bundespolitischer", "doppelten", "StaatsangehÃ¶rigkeitsgesetz", "Mehrstaatlichkeit",
+      "fordern", "Einführung", "Verfassungsmäßigkeit", "Aydan", "Standordsicherungsgesetztes", "Modell", "einheitliches",
+      "Ergeb-nisse", "Per-sonen", "generelle", "Evaluation", "Oberfinanzpräsident", "kardinaler", "anwendbares",
+      "läutet", "fordert", "Jelpke", "Geburtsjahrgang", "Optionspflichtigen", "Prozent", "Knapp", "deutsche",
+      "Optionspflichtige", "entschieden", "Entscheidungsverhalten", "melderechtlichen", "Zukunftsplanungen",
+      "optionspflichtig", "überwiegend", "Fallgruppe", "beinhaltet", "Pass", "Baccalauréat", "Köln-Ehrenfeld",
+      "Veli", "geboren", "Matura", "Optionspflichtigen", "französisches", "Herkunftslandes", "jemand", "Österreichische",
+      "Hauptschulabschluss", "vollendet", "Uli", "einzeln", "Abitur", "falsches", "Übergangsregelung", "Rot",
+      "Grün", "Bundeskanzleramt", "eingeladen", "Ab", "kurzem", "Verwaltungskos", "Eigenmittelbericht",
+      "Abfindungsregelungen", "Anrechnungsverfahren", "EU-Haushalts", "Steuerflüchtlinge", "Erweiterungsfähigkeit",
+      "Kommissionsbericht", "Einkommenssteuersatz", "Tisch", "Anstiegs", "körperschaftssteuersatz", "durchkommen",
+      "Spreizung", "Miarbeiterbeteiligung", "Kommission", "Arbeitsgemeinschaft", "starren", "Kliniken", "zielen",
+      "Optionspflichtverlängerungs", "Bundesinnenministerium", "Referentenentwurf", "kam", "Jugendlichen", "jungen",
+      "Problem", "empfinden", "untersucht", "Bundesinnenminister", "Neuregelung", "sagte"),
+    regex = FALSE, interjection = FALSE
+    )
+```
+
+
+--------------------------------------------
+#### "Geburts(recht|prinzip)"
+--------------------------------------------
+  
+```{r, message= F, eval= F, warning=F, echo=T}  
+kwic(
+  "GERMAPARL",
+    query= '"Geburts(recht|prinzip)"',
+    left= 10, right= 10, cqp= TRUE,
+    s_attribute= c(
+      "parliamentary_group", "speaker", "date", "url"), 
+    interjection = FALSE, regex = TRUE) %>%
+highlight(
+    lightgreen= c(
+      "Staatsangehörigkeitsrecht", "soli", "geborenen", "Kinder", "Inländerinnen", "Geburtsrechts", "Kindergartenalter",
+      "billigte", "Ius", "Schuleintritt", "WeggefÃ¤hrten", "binationalen", "uneingeschränktes",
+      "Inländern", "Durchgang", "Jus", "gekommenen", "rechtpolitisch", "eingebürgert", "eingeführt",
+      "Abstammung", "verankert", "schlagen"),
+    regex = FALSE, interjection = FALSE
+    )
+```
+
+
+--------------------------------------------
+#### "[Dd]oppelpass.*"
+--------------------------------------------
+
+```{r, message= F, eval= F, warning=F, echo=T}
+kwic(
+  "GERMAPARL",
+    query= '"[Dd]oppelpa(ss|Ã).*"',
+    left= 10, right= 10, cqp= TRUE,
+    s_attribute= c(
+      "parliamentary_group", "speaker", "date", "url"),
+    interjection = FALSE, regex = TRUE) %>%
+highlight(
+    lightgreen= c(
+      "Frauenquote", "Angehöriger", "geschilderten", "generellen", "globalisierten", "leben", "Burkas",
+      "Dagegen-Politik", "Mesut", "Ãzil", "Mietpreisbremse", "Schlammschlachten", "kosmopolitisch", "irrwitzig",
+      "Zwanziger", "Optionspflichtigen", "FuÃballstadion", "Philippika", "eleganter", "gespielt", "Fehlerquellen",
+      "verfehlten", "Anstatt", "Stattdessen", "konsequent", "gegangen", "Caffier", "Eleganz", "Burkaverbot",
+      "integrationspolitische", "Videoüberwachung", "Gegenseitigkeit", "Zugewinn", "EU-Bürger", "Henkel", "Erlangung",
+      "plausibel", "worin", "StaatsbÃ¼rgerschaft", "Ausländerhetze", "Straßenwahlkampf", "schwarzem",
+      "Volksbefragungen", "einhergegangen", "wurde", "losgetreten", "miterlebt", "hessischen", "starten",
+      "gemacht", "massiven", "Koch", "kamen", "funktionierten", "punkten", "Methoden", "doppelte", "Staatsangehörigkeit",
+      "Hessen", "Zeiten", "ebenso", "faul", "angeblicher", "Optionspflicht",
+      "abgeschafft", "Union", "gestoppt", "rot-grÃ¼ne"),
+    regex = TRUE, interjection = FALSE
+    )
+```
+
+
+--------------------------------------------
+#### "[Mm]ehrstaat.*"
+--------------------------------------------
+
+```{r, message= F, eval= F, warning=F, echo=T}  
+kwic(
+  "GERMAPARL",
+    query= '"[Mm]ehrstaat.*"',
+    left= 10, right= 10, cqp= TRUE,
+    s_attribute= c(
+      "parliamentary_group", "speaker", "date", "url"),
+    interjection = FALSE, regex = TRUE) %>%
+highlight(
+  lightgreen= c(
+    "binationalen", "ablesbar", "dass", "Wieso", "Haushalten", "irgendwo", "Fakt", "akzeptiert",
+    "Grindel", "Mehrstaatigkeit", "Hinnahme", "Vermeidung", "Einbürgerungen", "Staatsangehörigkeit",
+    "Einbürgerung", "hingenommen", "generell", "Staatsangehörigen", "Staatsangehörigkeitsrecht",
+    "Optionszwang", "Grundsatz", "EU-Bürger", "aufgewachsene", "Optionspflicht", "türkischen",
+    "eingebürgert", "auseinandergehen", "Doppelstaatler", "zugerufen", "Abendlandes", "ausgeblieben",
+    "Einbürgerungen", "Mehrstaatigkeit", "betrÃ¤chtliche", "Untergang", "Vorhin", "Aydan", "geschätzt",
+    "seriöse", "Wissens", "Vereinigung", "erworben", "Deutschland", "Kamelle", "Herkunftsstaat",
+    "einbürgern", "diplomatische", "problematisch", "derjenige", "erledigt","Hinnahme",
+    "Staatsangehörigkeit", "Mehrstaatlichkeit", "Einbürgerung", "hingenommen", "generelle",
+    "Staatsbürgerschaft", "Vermeidung", "Optionspflicht", "Doppelstaatlichkeit", "Grundsatz",
+    "Staatsangehörigkeitsrecht", "Integrationsprozesses", "binational", "EU-Staaten", "Ausländergesetzes",
+    "Habsburg", "Ehen", "Entlassung"),
+  regex = FALSE, interjection = FALSE
+  )
+```
+
+
+--------------------------------------------
+#### LDA-Topic modelling Staatsbürgerschaft (erste 300 Begriffe des Topics)
+--------------------------------------------
+
+[1] "Staatsangehörigkeit"        "deutsche"                    "deutschen"                   "Staatsbürgerschaft"        
+[5] "Deutschland"                 "Ausländer"                  "doppelte"                    "Integration"                
+[9] "Einbürgerung"               "geboren"                     "doppelten"                   "Gesellschaft"               
+[13] "Staatsangehörigkeitsrecht"  "leben"                       "ausländischen"              "Menschen"                   
+[17] "Deutsche"                    "Staatsbürger"               "ausländischer"              "lebenden"                   
+[21] "Staatsangehörigkeitsrechts" "entscheiden"                 "Deutscher"                   "Land"                       
+[25] "Staat"                       "Mitbürger"                  "möchte"                     "Eltern"                     
+[29] "Optionspflicht"              "jungen"                      "jemand"                      "Union"                      
+[33] "Pass"                        "AuslÃ¤ndern"                 "Marschewski"                 "auslÃ¤ndische"              
+[37] "Kinder"                      "Beck"                        "geben"                       "Mehrstaatigkeit"            
+[41] "lassen"                      "Herkunft"                    "seit"                        "Recht"                      
+[45] "sollten"                     "Mehrheit"                    "Jahren"                      "Rechte"                     
+[49] "Voraussetzungen"             "gehört"                     "Paß"                        "Jahre"                      
+[53] "Optionsmodell"               "integriert"                  "Wer"                         "Einbürgerungen"            
+[57] "behalten"                    "Teil"                        "Pflichten"                   "Schily"                     
+[61] "lebt"                        "Abschaffung"                 "Reform"                      "Mitbürgerinnen"            
+[65] "Meinung"                     "türkischen"                 "Staatsbürgerschaftsrecht"   "Hinnahme"                   
+[69] "wer"                         "deutscher"                   "bereits"                     "eingebürgert"              
+[73] "dauerhaft"                   "Geburt"                      "aufgewachsen"                "erhalten"                   
+[77] "akzeptieren"                 "sprechen"                    "geborenen"                   "CDU/CSU"                    
+[81] "darf"                        "einbÃ¼rgern"                 "Ã–zdemir"                    "Türken"                    
+[85] "erwerben"                    "akzeptiert"                  "Einführung"                 "Staatsangehörige"          
+[89] "Koalitionsvereinbarung"      "Bevölkerung"                "Ausländerrecht"             "Deutschen"                  
+[93] "Migranten"                   "Staatsangehörigen"          "Westerwelle"                 "generelle"                  
+[97] "Wahlrecht"                   "Generation"                  "generell"                    "türkische"   
+[101] "sollen"                        "Dauer"                         "geborene"                      "politisch"                    
+[105] "besitzen"                      "Millionen"                     "Thema"                         "Rüttgers"                    
+[109] "Landes"                        "Schmalz-Jacobsen"              "Betroffenen"                   "Vermeidung"                   
+[113] "Ausweisung"                    "StaatsangehÃ¶rigkeiten"        "verloren"                      "spricht"                      
+[117] "eben"                          "neben"                         "Beifall"                       "doppelter"                    
+[121] "Bekenntnis"                    "Haus"                          "Erwerb"                        "Heimat"                       
+[125] "acht"                          "automatisch"                   "Person"                        "Fällen"                      
+[129] "erleichtern"                   "Mitbürgern"                   "integrieren"                   "Sinn"                         
+[133] "Ausländerinnen"               "Loyalität"                    "lebende"                       "CDU"                          
+[137] "Innenminister"                 "aufgeben"                      "unserem"                       "Teilen"                       
+[141] "türkischer"                   "Rechtslage"                    "Sprache"                       "Ausländergesetzes"           
+[145] "modernes"                      "verzichten"                    "Prinzip"                       "Staatsbürgerschaften"        
+[149] "Fälle"                        "ausgewiesen"                   "Bundesinnenminister"           "seid"                         
+[153] "bisherigen"                    "verlangen"                     "Staatsangehörigkeitsgesetzes" "verbunden"                    
+[157] "unserer"                       "Unterschied"                   "Schwierigkeiten"               "rechtmäßig"                 
+[161] "Mehrstaatlichkeit"             "Abschiebung"                   "Staatsbürgerschaftsrechts"    "Ausdruck"                     
+[165] "Lebensjahr"                    "Zeitlmann"                     "gilt"                          "gehören"                     
+[169] "Staaten"                       "Staatsangehörigkeitsrechtes"  "Kanther"                       "Mutlu"                        
+[173] "weiterhin"                     "Rechten"                       "Hürden"                       "Schule"                       
+[177] "Zugehörigkeit"                "Optionszwang"                  "erworben"                      "fünf"                        
+[181] "aufwachsen"                    "Regel"                         "Unterschriftenaktion"          "Verlust"                      
+[185] "Republik"                      "abschaffen"                    "Personen"                      "HÃ¤rte"                       
+[189] "Einbürgerungstest"            "bleiben"                       "Fristen"                       "gelebt"                       
+[193] "Integrationsprozesses"         "Einbürgerungszahlen"          "Zeit"                          "gerne"                        
+[197] "Erleichterung"                 "Aufenthalt"                    "erfüllen"                     "Optionsmodells"               
+[201] "Abstammung"                    "Kampagne"                      "junge"                         "Grundsatz"                    
+[205] "Heimatland"                    "Wurzeln"                       "Bindungen"                     "gleiche"                      
+[209] "beibehalten"                   "abgeschafft"                   "Doppelstaatler"                "Türkei"                      
+[213] "abgeschoben"                   "Veit"                          "Mayer"                         "Doppelpaß"                   
+[217] "mindestens"                    "Praxis"                        "Nichtdeutschen"                "hingenommen"                  
+[221] "Ausländergesetz"              "geworden"                      "Erleichterungen"               "besitzt"                      
+[225] "bekennen"                      "werben"                        "Sonntag-Wolgast"               "Ausländerbeauftragten"       
+[229] "aufhalten"                     "straffällig"                  "ermöglichen"                  "längst"                      
+[233] "rechtliche"                    "generellen"                    "Staatsangehörigkeitsgesetz"   "Ausnahmen"                    
+[237] "Wirkung"                       "alte"                          "voraus"                        "Toleranz"                     
+[241] "Jahr"                          "Auffassung"                    "zurück"                       "Staatsvolk"                   
+[245] "deutsch"                       "Nachteile"                     "wählen"                       "Test"                         
+[249] "Staatsangehöriger"            "willkommen"                    "gleichen"                      "geltende"                     
+[253] "Beibehaltung"                  "erlangen"                      "Ã–calan"                       "Optionsregelung"              
+[257] "Innenausschuß"                "behandelt"                     "unabhÃ¤ngig"                   "betreffenden"                 
+[261] "Identität"                    "Gegenseitigkeit"               "verlieren"                     "beantragen"                   
+[265] "Einbürgerungsverfahren"       "Lebensmittelpunkt"             "verliert"                      "Kompromiss"                   
+[269] "Doppelpass"                    "Ausland"                       "Jus"                           "soli"                         
+[273] "EU-Bürger"                    "Rassismus"                     "Ã–zcan"                        "Mehrheiten"                   
+[277] "bzw"                           "praktisch"                     "Zeichen"                       "Staatsbürgern"               
+[281] "zwei"                          "modernen"                      "Staates"                       "Voraussetzung"                
+[285] "rechtlich"                     "Klasse"                        "derjenige"                     "Neuregelung"                  
+[289] "mehrere"                       "Ausländerbeauftragte"         "Lebenswirklichkeit"            "Volljährigkeit"              
+[293] "Pßsse"                        "Strobl"                        "Kultur"                        "Sicht"                        
+[297] "erfolgreichen"                 "Wohnbevölkerung"              "Köln"                         "komme"     
+
+#### Diktionärsbegriffe (statistisch)
+
+- Staatsangehörigkeit(sgesetz/-es), Einbürgerung, Staatsangehörigkeitsrecht(s/es), Optionspflicht, Pass, Optionsmodell, Staatsbürger(schaft/-en),
+- Staatsangehörigen, doppelt.* (nur als n-gram), Paß, Staatsbürgerschaftsrecht, Staatsbürgerschaft(srecht), Mehrstaatigkeit, Einbürgerungen,
+- Mehrstaatlichkeit, eingebürgerten, Staatsangehörige, einbürgern, Staatsangehörigkeiten, Ausländergesetzes, Abschiebung, Optionszwang,
+- Einbürgerungstest, Einbürgerungszahlen, Aufenthalt, Optionsmodells, Doppelstaatler, abgeschoben, Doppelpaß, Ausländergesetz, Staatsangehöriger,
+- Doppelpass, soli, Staatsbürgern, Pässe
+
+#### Ambiguität, Methaphern und interkontextuelle Begriffe
+
+- Ausweisung (Synonym für Abschiebung, aber ambig), Heimat(land) (interkontextuell, methaphorisch), Loyalität (interkontextuell),
+- ausgewiesen (synonym, jedoch ambig), Ausländerbeauftagt.* (qualitativer Kontext, kein enger Kontext von definitorischen Staatsbürgerschaftsaspekten)
+- Mitbürger/ EU-Bürger/ Bürger/ Bevölkerung/ Wohnbevölkerung/ Deutsche/ Nichtdeutsche (Diskurskollektive Beziechnungen, kontextuell, zu weiter Kontext),
+- Wurzeln (Methapher), Identität (interkontextuell, latent), Jus (OCR-Problem, Rauschen), Abstammung (ambig, Rauschen), Optionsregelung (Rauschen)
+
+#### Bezugsbegriffe zu Staatsbürgerschaft (Substantive)
+
+- Hinnahme, Herkunft, Mitbürger(n/innen), Meinung, Deutschland, Staat, Kinder, Voraussetzungen, Migranten, Koalitionsvereinbarung, Wahlrecht,
+- Ausländer(n/innen), Teil, Abschaffung, Geburt, Bevölkerung, Generation, ausländische(r/n), Marschewski, Pflichten, Reform, Einführung,
+- Westerwelle, Integration, Gesellschaft, Menschen, Land, Eltern, Union, Recht(e), Jahre, Schily, CDU/CSU, Türken, Deutschen, Beck, Dauer,
+- Wer, Jahren, A-zdemir, Millionen, Thema, Rüttgers, Landes, Schmalz-Jacobsen, Betroffenen, Vermeidung, Beifall, Bekenntnis, Haus, Erwerb,
+- Person, Fällen, Sinn, CDU, (Bundes)Innenminister, Teilen, Rechtslage, Sprache, Prinzip, Fälle, Unterschied, Schwierigkeiten, Ausdruck,
+- Lebensjahr, Zeitlmann, Staaten, Kanther, Mutlu, Rechten, Hürden, Schule, Zugehörigkeit, Regel, Unterschriftenaktion, Verlust, Republik,
+- Personen, Härte, Fristen, Integrationsprozesses, Zeit, Erleichterung, Kampagne, Grundsatz, Bindungen, Türkei, Mayer, Veit, Praxis, hingenommen,
+- Erleichterungen, Sonntag-Wolgast, Ausnahmen, Wirkung, Toleranz, Jahr, Auffassung, Nachteile, Test, Beibehaltung, A-calan, Innenausschuß,
+- Gegenseitigkeit, Kompromiss, Ausland, Rassismus, A-zcan, Mehrheiten, Zeichen, Staates, Voraussetzung, Neuregelung, Volljährigkeit, Sicht,
+- Lebenswirklichkeit, Kultur, Köln, Wohnbevölkerung, Strobl, Klasse
+
+#### Verben, Adjektive, Personalpronommen, Adverben
+
+- lassen, sollten, behalten, lebt, dauerhaft, akzeptieren, darf, erwerben, geboren, leben, entscheiden, jungen, gehört, sprechen, akzeptiert,
+- möchte, geben, aufgewachsen, geborenen, lebenden, erhalten, generell(e), deutsch(e/en), türkisch(e/en/er), sollen, geborene, politisch,
+- türkischen, deutschen, wer, generelle, seit, bereits, jemand, besitzen, verloren, spricht, eben, neben, acht, automatisch, erleichtern, integrieren,
+- lebende, aufgeben, unserem, modernes, verzichten, seid,  bisherigen, verlangen, verbunden, unserer, rechtmäßig, gilt, gehören, weiterhin, erworben,
+- fünf, aufwachsen, abschaffen, bleiben, gelebt, gerne, erfüllen, gleiche, beibehalten, abgeschafft, mindestens, geworden, besitzt, bekennen, werben,
+- längst, aufhalten, straffällig, ermöglichen, längst, rechtliche, generellen, alte, voraus, zurück, deutsch, wählen, willkommen, gleichen, geltende,
+- erlangen, behandelt, unabhängig, betreffenden, verliert, bzw, praktisch, zwei, komme, modernen, derjenige, rechtlich, mehrere, erfolgreichen
+

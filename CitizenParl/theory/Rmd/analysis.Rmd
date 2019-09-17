@@ -1,0 +1,249 @@
+---
+title: "Analysis"
+author: "Kevin Glock"
+date: "11 9 2019"
+output: html_document
+encoding: UTF-8
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### [Aim](file:///C:/Users/admin/Desktop/Anhang/CitizenParl/theory/Presi.html)
+
+### [Theory](file:///C:/Users/admin/Desktop/Anhang/CitizenParl/theory/theory.html)
+
+### [Methodology](file:///C:/Users/admin/Desktop/Anhang/CitizenParl/theory/methodology.html)
+
+
+## Einwanderungsrate
+
+
+- Korreltationstests: Einwanderungsrate und absolute/relative Häufigkeiten relevanter Diskursbegriffe im Diktonär
+
+- absolute Einwanderungsrate war zwischen 1991 und 1995 über 1 Million sank dann und stieg nach 2012 erneut über eine Million (Statista 2019).
+
+
+```{r, message=FALSE, eval=TRUE, warning=FALSE, echo= F}
+library(data.table)
+stat <-read.csv(file= "C:/Users/admin/stats_citizen.csv", header=TRUE, sep = ";")
+immigr_year <- c(stat[,1:2])
+immigr_year <- as.data.frame(immigr_year)
+```
+
+```{r, message=FALSE, eval=TRUE, warning=FALSE, echo= F}
+ bpimgryear <- barplot(immigr_year$immigration, names = immigr_year$year,
+         xlab = "Einwanderung pro Jahr",
+         )
+```
+
+
+## Häufigkeiten
+
+```{r, message= FALSE, eval= TRUE, warning=FALSE, echo=F}
+library(polmineR)
+library(magrittr)
+library(tm)
+library(xts)
+
+```
+
+
+- Häufigkeiten der Flektionen der Lemmata "doppelt" und "Staatsbürger" und ihrer verschidenen Komposita zeigen grob approximierende Zeitverlaufskurven zur absoluten Einwanderungsrate.
+ 
+## Häufigkeiten "[Ss]taatsbürger.*"
+
+
+```{r, message= FALSE, eval= TRUE, warning=FALSE, echo=F}
+use("GermaParl")
+dis_actors <- dispersion("GERMAPARL",
+                         query =  '"[Ss]taatsbürger.*"',
+                         cqp = TRUE,
+                         s_attribute = c("year", "parliamentary_group"),
+                         freq = FALSE)
+citizenship_actors <- xts(x = dis_actors[,c("CDU/CSU", "FDP", "GRUENE", "SPD", "PDS", "LINKE")],
+          order.by = as.Date(
+            sprintf("%s-01-01",
+            dis_actors[["year"]]
+            ))
+)
+```
+
+```{r, message= FALSE, eval= TRUE, warning=FALSE, echo=F}
+plot.xts(
+  citizenship_actors,
+  multi.panel = FALSE,
+  col = c("black",
+          "yellow",
+          "green",
+          "red",
+          "violet",
+          "violet"),
+  main = "[Ss]taatsbürger.*",
+  lwd = 2,
+   ylim = c(0,90),
+  yaxs = "r"
+  )
+```
+
+
+## Häufigkeiten "[Dd]oppelt.*" "[Ss]taatsbürger.*"' , '"[Dd]oppelstaatsbürg.*"', '"[Mm]ehrstaat.*"
+
+
+```{r, message= FALSE, eval= TRUE, warning=FALSE, echo=F}
+dis_actors2 <- dispersion("GERMAPARL",
+                         query =  c('"[Dd]oppelt.*" "[Ss]taatsbürger.*"' , '"[Dd]oppelstaatsbürg.*"', '"[Mm]ehrstaat.*"'),
+                         cqp = TRUE,
+                         s_attribute = c("year", "parliamentary_group"),
+                         freq = FALSE
+                         )
+citizenship_actors2 <- xts(x = dis_actors2[,c("CDU/CSU", "FDP", "GRUENE", "SPD", "PDS", "LINKE")],
+          order.by = as.Date(
+            sprintf("%s-01-01",
+            dis_actors2[["year"]]
+            ))
+          )
+
+```
+
+```{r, message= FALSE, eval= TRUE, warning=FALSE, echo=F}
+plot.xts(
+  citizenship_actors2,
+  multi.panel = FALSE,
+  col = c("black",
+          "yellow",
+          "green",
+          "red",
+          "violet",
+          "violet"),
+  main = "'[Dd]oppel.* [Ss]taatsbürger.* |
+  [Dd]oppelstaatsbürg.* | [Mm]ehrstaat.*'",
+  lwd = 2,
+  ylim = c(0,35),
+  yaxs = "r"
+  )
+```
+
+## Häufigkeiten "[Aa]ussied.*"
+
+- Betrachten wir dabei unterschiedliche Hauptgruppen von Einwanderern (hier: Aussiedler und Asylsuchende) zeigt sich, Ende des 20. Jahrhunderts wurde vornehmlich über Aussiedler debattiert und ab den 2005er Jahren vermehrt über Asylsuchende.
+- Hier besteht ein theoretisch interessanter Unterschied der Herkunft. Waren es Ende der 90er vornehmlich ethnische Deutsche (autochthone Migranten), die permant migrieren und wenige EU-Migranten, sind es nach 2005 vornhemlich allochthone Migranten aus dem Nahen Osten und Afrika, die im Diskurs scheinbar temporär migrieren und zudem steigende Zahlen an EU-Migranten.
+- Hieraus leitet sich ein most similar cases design ab, das bei der Betrachtung von Unterschieden berücksichtigt wird
+
+```{r, message= FALSE, eval= TRUE, warning=FALSE, echo=F}
+dis_actors4 <- dispersion("GERMAPARL",
+                         query =  '"[Aa]ussied.*"',
+                         cqp = TRUE,
+                         s_attribute = c("year", "parliamentary_group"),
+                         freq = FALSE
+                         )
+citizenship_actors4 <- xts(x = dis_actors4[,c("CDU/CSU", "FDP", "GRUENE", "SPD", "PDS", "LINKE")],
+          order.by = as.Date(
+            sprintf("%s-01-01",
+            dis_actors4[["year"]]
+            ))
+          )
+
+```
+
+```{r, message= FALSE, eval= TRUE, warning=FALSE, echo=F}
+plot.xts(
+  citizenship_actors4,
+  multi.panel = FALSE,
+  col = c("black",
+          "yellow",
+          "green",
+          "red",
+          "violet",
+          "violet"),
+  main = "'[Aa]ussied.*'",
+  lwd = 2,
+  ylim = c(0,40),
+  yaxs = "r",
+  )
+```
+
+
+## Häufigkeiten "[Aa]syl.*"
+
+
+```{r, message= FALSE, eval= TRUE, warning=FALSE, echo=F}
+dis_actors3 <- dispersion("GERMAPARL",
+                         query =  '"[Aa]syl.*"',
+                         cqp = TRUE,
+                         s_attribute = c("year", "parliamentary_group"),
+                         freq = FALSE
+                         )
+citizenship_actors3 <- xts(x = dis_actors3[,c("CDU/CSU", "FDP", "GRUENE", "SPD", "PDS", "LINKE")],
+          order.by = as.Date(
+            sprintf("%s-01-01",
+            dis_actors3[["year"]]
+            ))
+          )
+
+```
+
+```{r, message= FALSE, eval= TRUE, warning=FALSE, echo=F}
+plot.xts(
+  citizenship_actors3,
+  multi.panel = FALSE,
+  col = c("black",
+          "yellow",
+          "green",
+          "red",
+          "violet",
+          "violet"),
+  main = "'[Aa]syl.*'",
+  lwd = 2,
+  ylim = c(0,600),
+  yaxs = "r",
+  )
+```
+
+
+
+## Statistische Analyse
+
+
+- Statistische Analyse: der Kookkurenzen der Diktionärsbegriffe (nach POS-tagging) nach Fraktionen (ll-ratio test)
+
+
+## Kookkurrenzen Staatsbürgerschaft
+
+
+```{r, message= FALSE, eval= TRUE, warning=FALSE, echo=F}
+cooccurrences("GERMAPARL", query = '"Staatsbürgerschaft"', left = 25, right = 25) %>% 
+  subset(ll >= 11.83) %>%
+  subset(!tolower(word) %in% tm::stopwords("de")) %>%
+  subset(!word %in% c("''", ",", "``")) %>%
+  dotplot(cex = 0.8, main = 'Signifikante Kookkurrenzen zu "Staatsbürgerschaft"')
+```
+
+
+## Kookkurrenzen Optionspflicht
+
+
+```{r, message= FALSE, eval= TRUE, warning=FALSE, echo=F}
+cooccurrences("GERMAPARL", query = '"Optionspflicht"', left = 25, right = 25) %>% 
+  subset(ll >= 11.83) %>%
+  subset(!tolower(word) %in% tm::stopwords("de")) %>%
+  subset(!word %in% c("''", ",", "``")) %>%
+  dotplot(cex = 0.8, main = 'signifikante Kookkurrenzen zu "Optionspflicht"')
+```
+
+
+## Patitionen (Supkorpora)
+
+- Es wird je eine Partition (Subkorpus) für die Fraktionen gebildet um diese vergleichbar zu machen
+- Gemeinsam auftretende Begriffe können so zwischen den Gruppen verglichen werden
+
+
+## Klassifikation
+
+
+- Ziel: Klassifikation der sprachlichen Kontextualisierungen (identitär: national/transnational; universalistisch: humanitarisitsch; utilitaristisch: ökonomisch/ sozial) nach Part-Of-Speech und Fraktionen durch Subset-Methode; Auswertung: Divergenzen und Konvergenzen und Erklärung des Wandels über die Zeit durch Immigrationsrate und singuläre Kontextfaktoren (Islamkonferenz etc.)
+
+
+
+### [Literature](file:///C:/Users/admin/Desktop/Anhang/CitizenParl/theory/literature.html)

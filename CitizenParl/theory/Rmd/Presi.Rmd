@@ -1,0 +1,45 @@
+---
+title: "Aim"
+author: "Kevin Glock"
+date: "11 9 2019"
+output:
+  html_document: default
+encoding: UTF-8
+subtitle: The parliamentary discourse on citizenship in Germany between 1996 and 2016.
+  A corpus lingustical context analysis of the citizenship concept in R
+always_allow_html: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+
+## Vorhaben
+
+
+- Untersuchung des parlamentarischen Diksurses über Staatsbürgerschaft in Deutschland
+
+- korpuslinguistischer Analyse mit PolmineR (GermaParl corpus)
+
+- diktionärsbasierte Auswertung relevanter Plenarprotokolle zwischen 1996 und 2016
+
+- Beschreibend: Fraktionspolitische Positionierung in der sprachlichen Kontextualisierung von defintorischen Staatsbürgerschaftsaspekten (Ziel: Abbildung und Herausarbeitung von sprachlichen Konvergenzen und Divergenzen zwischen Fraktionen)
+
+- Überprüfung: sprachstatistischer Test auf signifikantes Vokabular im Kontext von Staatsbürgerschaft (log-likelihood ratio test) und Vergleich der klassifizierten Fraktionen
+
+- Erklärend: Salienz für Einwanderungsproblematik hat Einfluss auf den sprachlichen Wandel im deutschen Staatsbürgerschaftsdiskurs (Analyse: Korrelation von Einwanderungsrate und absoluten/relativen Haufigkeiten relevanter Suchbegriffe über den Beobachtungszeitraum), Berücksichtigung singulärer Ereignisse im Diskurs als Kontextfaktoren abgebildet durch Zeitpunkte in Diskursgrafiken (Data zu: Islamkonferenz, 9/11, "Flüchtlingskrise 2015", etc.)
+
+- Fragen: In welchem Maße hat sich die sprachliche Kontextualisierung des Staatsbürgerschaftskonzeptes in Palamentsdebatten in Deutschland zwischen 1996 und 2016 gewandelt?
+Wie wird das Konzept von politischen Akteuren hinsichtlich der Schließungsaspekte von Staatsangehörigkeit kontextualisiert?
+Welchen Einfluss hat eine erhöhte Immigrationsrate auf die Deutung von Immigration und Restriktionen im Zugang zu Staatsbürgerschaft?
+
+## Chapters
+
+- [Theory](file:///C:/Users/admin/Desktop/Anhang/CitizenParl/theory/theory.html)
+
+- [Methodology](file:///C:/Users/admin/Desktop/Anhang/CitizenParl/theory/methodology.html)
+
+- [Anaylsis](file:///C:/Users/admin/Desktop/Anhang/CitizenParl/theory/analysis.html)
+
+- [Literature](file:///C:/Users/admin/Desktop/Anhang/CitizenParl/theory/literature.html)
