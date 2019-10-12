@@ -17,18 +17,18 @@
 
 ## Three research questions will be followed:
 
-## To what extent has the linguistic contextualization of the concept of citizenship in plenary debates of the Federal Republic of Germany on the federal level changed between 1996 and 2016?
+## To what extent has the contextualization of the concept of citizenship in plenary debates of the Fed-eral Republic of Germany on federal level changed between 1996 and 2016?
 
-## How is the concept of dual citizenship contextualised by parliamentary actors?
+## How does the total immigration correspond to the discourse on citizenship illustrated by political ac-tors at the federal level?
 
-## To what extend do contextualisations of dual citizenship differ between parliamentary groups? Which arguments are represented?
+## To what extend do imagination and linguistic contextualisation of dual citizenship differ between par-liamentary groups and its speaking members in parliament?
 
 
 ## Two hypotheses were tested:
 
-## H1: When saliency on immigration rates raise, the frequency of terms related to the citizenship context will increase.
-##     The higher the immigration rate increase, the higher frequencies will raise on average.
+## H1: When the total immigration rate raises, the relative frequency of terms related to the citizenship context will increase. The higher the immigration rate increase, the higher frequencies will raise on average.
 ##     r > 0; rho > 0
 
-## H2: Political parties who are classified as left-wing (right-wing) parties do argue more frequently with liberal/transnational (communitarian/national) argumentation on average.
-##     > 0
+## H2: Relative percentages of dual citizenship aspects contextualised with identity frames of progressive, transnational, or multicultural (conservative, nationalistic, or racist) references are higher for political parties who are classified as left-wing (right-wing) parties and vis visa.
+##     For CDU/CSU := x%conservative - x%progressive > 0
+##     For other parties := x%progressive - x%conservative > 0
