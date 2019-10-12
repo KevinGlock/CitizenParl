@@ -1,0 +1,7 @@
+actors ;issues;norm
+[Dd]oppelstaat.*;.*[Aa]us.bürger.*;Blutsrecht.*
+[Mm]ehrstaat.*;.*[Ee]in.bürger.*;Geburts(recht|prinzip).*
+.*[Ss]taatsbürger.*;Doppelpa(ss|ß).*;"""[Ii]us"" ""soli""', '""[Ii]us"" ""sanguinii""', '""[Jj]us"" ""soli""', '""[Jj]us"" ""sanguinii""'"
+.*[Ss]taats(an|zu)gehörig.*;"""Pa(ss|ß)""', '""Pä(ss|ß)e""'";Abstammungs(recht|prinzip).*
+ [Ss]taatenlos.*;[Oo]ptionspflicht.*;
+;[Oo]ptionszwang.*;

@@ -1,0 +1,8 @@
+﻿[Dd]oppelstaat.*
+[Mm]ehrstaat.*
+.*[Ss]taatsbürger.*
+"""[Dd]oppel.*"" ""[Ss]taat.*""'"
+Doppelstaats(an|zu)gehörig.*
+Doppelpa(ss|ß).*
+[Oo]ptionspflicht.*
+[Oo]ptionszwang.*
